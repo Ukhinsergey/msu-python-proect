@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+import os
 
 app = Flask(__name__)
 
@@ -25,6 +26,7 @@ def test_handler():
 
 
 if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
     app.run(
-        host="0.0.0.0", port=3000, debug=True, threaded=True,
+        host="0.0.0.0", port=port
     )
