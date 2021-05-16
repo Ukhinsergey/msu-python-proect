@@ -15,7 +15,7 @@ def index():
 @app.route("/test-webhook", methods=['GET', 'POST'])
 def test_author_response():
     if request.method == "POST":
-        bot.bot.send_message(chat_id=234383022, message='I am working')
+        bot.bot.send_message(chat_id=234383022, text='I am working')
         return "ok"
     elif request.method == "GET":
         return "ok"
