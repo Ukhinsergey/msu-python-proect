@@ -15,9 +15,9 @@ def test_handler():
         return "my get"
     elif request.method == "POST":
         print('========')
-        print(dir(request))
-        print(request)
-        print(type(request))
+        # print(dir(request))
+        # print(request)
+        # print(type(request))
         print(request.data)
         print(request.form)
         print('========')
@@ -31,5 +31,5 @@ if __name__ == "__main__":
     print(port)
     print(port, file=sys.stderr)
     app.run(
-        host="0.0.0.0", port=port
+        host="0.0.0.0", port=port, threaded=True
     )
