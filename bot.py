@@ -21,10 +21,7 @@ import os
 
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
-
-
-import twitch.interface
-
+from flask import request
 
 # Enable logging
 logging.basicConfig(
@@ -41,13 +38,22 @@ def echo(update: Update, _: CallbackContext) -> None:
 
 class TwitchBot(Updater):
     """Main bot class"""
-    def __init__(self, config_dir: str) -> None:
-        with open(os.path.join(config_dir, 'bot_config.json')) as config_file:
-            config = json.load(config_file)
-
-        super().__init__(config['token'])
+    def __init__(self) -> None:
+        
+        bot_token = os.environ.get("BOT_TOKEN", None)
+        super().__init__(bot_token)
 
         self._add_handlers()
+
+        port = int(os.environ.get("PORT", 443))
+        base_url = os.environ.get("APP_URL")
+        url_path = os.environ.get("TELEGRAM_WH")
+        self.start_webhook(
+            listen="0.0.0.0", 
+            port=port,
+            url_path=url_path,
+            webhook_url=base_url+url_path
+        )
 
 
     def _add_handlers(self) -> None:
@@ -90,15 +96,15 @@ class TwitchBot(Updater):
             )
 
 
-def main() -> None:
-    """Start the bot."""
+# def main() -> None:
+#     """Start the bot."""
 
-    bot = TwitchBot('./config')
+#     bot = TwitchBot('./config')
 
-    # Start the Bot
-    bot.start_polling()
-    bot.idle()
+#     # Start the Bot
+#     bot.start_polling()
+#     bot.idle()
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
