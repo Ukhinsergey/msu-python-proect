@@ -45,15 +45,17 @@ class TwitchBot(Updater):
 
         self._add_handlers()
 
-        port = int(os.environ.get("PORT", 443))
-        base_url = os.environ.get("APP_URL")
-        url_path = os.environ.get("TELEGRAM_WH")
-        self.start_webhook(
-            listen="0.0.0.0", 
-            port=port,
-            url_path=url_path,
-            webhook_url=base_url+url_path
-        )
+        self.start_polling()
+
+        # port = int(os.environ.get("PORT", 443))
+        # base_url = os.environ.get("APP_URL")
+        # url_path = os.environ.get("TELEGRAM_WH")
+        # self.start_webhook(
+        #     listen="0.0.0.0", 
+        #     port=port,
+        #     url_path=url_path,
+        #     webhook_url=base_url+url_path
+        # )
 
 
     def _add_handlers(self) -> None:
