@@ -1,3 +1,7 @@
+click
 python-telegram-bot
 Flask
 Werkzeug
+gunicorn
+Jinja2
+MarkupSafe
