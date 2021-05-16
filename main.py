@@ -12,6 +12,13 @@ bot = TwitchBot()
 def index():
     return "<h1>Welcome to our server !!</h1>"
 
+@app.route("/test-webhook", methods=['GET', 'POST'])
+def test_author_response():
+    if request.method == "POST":
+        bot.bot.send_message(chat_id=234383022, message='I am working')
+        return "ok"
+    elif request.method == "GET":
+        return "ok"
 
 # @app.route('/telegram', methods=["GET", "POST"])
 # def telegram_webhook_handler():
@@ -23,8 +30,6 @@ def index():
 #         return "telegram get"
 
 if __name__ == '__main__':
-    # Threaded option to enable multiple instances for multiple user access support
-
     port = int(os.environ.get("PORT", 443))
     app.run(
         threaded=True, 
