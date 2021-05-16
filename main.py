@@ -25,8 +25,8 @@ def telegram_webhook_handler():
 if __name__ == '__main__':
     # Threaded option to enable multiple instances for multiple user access support
 
-    port = int(os.environ.get("PORT", 443))
+    # port = int(os.environ.get("PORT", 443))
     app.run(
         threaded=True, 
-        port=port
+        port=5000
     )
