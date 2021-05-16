@@ -12,6 +12,7 @@ def respond():
 
     response = {}
 
+
     # Check if user sent a name at all
     if not name:
         response["ERROR"] = "no name found, please send a name."
