@@ -116,8 +116,7 @@ class TwitchBot(Updater):
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         result = self.database.get_subs_for_user(update.message.chat_id)
         update.message.reply_text(
-            text="Подписки:"
-            '\n'.join(map(str, result))
+            text="Подписки: " + '\n'.join(map(str, result))
         )
     
     

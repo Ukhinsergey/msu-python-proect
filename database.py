@@ -46,18 +46,18 @@ class Database:
 
     def _delete_on_cond(self, condition):
         with engine.connect() as conn:
-            conn.execute(text("DELETE FROM {self.table_name} WHERE {condition}"))
+            conn.execute(text(f"DELETE FROM {self.table_name} WHERE {condition}"))
             conn.commit()
 
     def get_subs_for_user(self, chat_id):
         """Get list of subscriptions for user 'chat_id'"""
         result = self._get_data(self.user_colname, chat_id)
-        return [cur[0] for cur in result]
+        return [cur[1] for cur in result]
 
     def get_users_for_sub(self, twitch_id):
         """Get list of users subscribed for twitch channel with 'twitch_id'"""
         result = self._get_data(self.sub_colname, twitch_id)
-        return [cur[1] for cur in result]
+        return [cur[0] for cur in result]
     
     def put_subs_for_user(self, chat_id, twitch_ids):
         """Put list of subscriptions 'twitch_ids' for user 'chat_id'"""
