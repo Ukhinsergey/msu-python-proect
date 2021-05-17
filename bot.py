@@ -117,7 +117,7 @@ class TwitchBot(Updater):
         result = self.database.get_subs_for_user(update.message.chat_id)
         update.message.reply_text(
             text="Подписки:"
-            '\n'.join(result)
+            '\n'.join(map(str, result))
         )
     
     
