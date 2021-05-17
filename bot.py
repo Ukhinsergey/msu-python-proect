@@ -23,7 +23,7 @@ from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 from flask import request
 
-from main import database
+from database import Database
 
 # Enable logging
 logging.basicConfig(
@@ -43,6 +43,7 @@ class TwitchBot(Updater):
     def __init__(self) -> None:
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
+        self.database = Database()
         self._add_handlers()
 
         self.start_polling()
@@ -80,7 +81,7 @@ class TwitchBot(Updater):
             for channel in channels_to_subscribe:
                 try:
                     # twitch.interface.subscribe_to_channel(channel) # Subscribe to one
-                    database.put_subs_for_user(update.message.chat_id, channel)
+                    self.database.put_subs_for_user(update.message.chat_id, channel)
                     update.message.reply_text(
                         text=f"Успешная подписка на {channel}!"
                     )
@@ -99,7 +100,7 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    database.delete_user_sub(update.message.chat_id, channel)
+                    self.database.delete_user_sub(update.message.chat_id, channel)
                     update.message.reply_text(
                         text=f"Успешная отписка от {channel}!"
                     )
@@ -113,7 +114,7 @@ class TwitchBot(Updater):
             )
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
-        result = database.get_subs_for_user(update.message.chat_id)
+        result = self.database.get_subs_for_user(update.message.chat_id)
         update.message.reply_text(
             text="Подписки:"
             '\n'.join(result)

@@ -5,11 +5,9 @@ import os
 
 from flask import Flask, request
 from bot import TwitchBot
-from database import Database
 
 app = Flask(__name__)
 bot = TwitchBot()
-database = Database()
 
 @app.route('/')
 def index():
