@@ -7,3 +7,4 @@ MarkupSafe==1.1.1
 Werkzeug==0.15.6
 python-telegram-bot==13.5
 requests
+sqlalchemy==1.4.12
