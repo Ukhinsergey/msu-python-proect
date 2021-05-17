@@ -81,7 +81,7 @@ class TwitchBot(Updater):
             for channel in channels_to_subscribe:
                 try:
                     # twitch.interface.subscribe_to_channel(channel) # Subscribe to one
-                    self.database.put_subs_for_user(update.message.chat_id, channel)
+                    self.database.put_subs_for_user(update.message.chat_id, [int(channel)])
                     update.message.reply_text(
                         text=f"Успешная подписка на {channel}!"
                     )
@@ -100,7 +100,7 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    self.database.delete_user_sub(update.message.chat_id, channel)
+                    self.database.delete_user_sub(update.message.chat_id, [int(channel)])
                     update.message.reply_text(
                         text=f"Успешная отписка от {channel}!"
                     )
