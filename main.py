@@ -32,9 +32,9 @@ def twitch_post():
         data = json.loads(request.data)
         twitch_api.info.append(data)
         if "challenge" in data.keys():
-            return request.form["challenge"]
+            return request.form["challenge"] , 200
         else:
-            return "ok"
+            return "ok" , 200
     else:
         return 'get ' + str(twitch_api.info)
 
