@@ -32,11 +32,13 @@ def twitch_post():
         data = json.loads(request.data)
 
         twitch_api.info.append(data)
-        bot.bot.send_message(chat_id=234383022, text=str(data))
+        # bot.bot.send_message(chat_id=234383022, text=str(data))
         bot.bot.send_message(chat_id=456145017, text=str(data))
         if "challenge" in data.keys():
+            bot.bot.send_message(chat_id=456145017, text="in")
             return request.form["challenge"], 200
         else:
+            bot.bot.send_message(chat_id=456145017, text="not in")
             return "ok",200
     else:
         return 'get ' + str(twitch_api.info), 200
