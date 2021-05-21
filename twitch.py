@@ -18,7 +18,7 @@ class TwitchApi:
         self.twitch_app_token_json = app_token_request.json()
 
         self.headers = {
-            'Client-ID': self.clientid,
+            'Client-ID': self.client_id,
             'Content-type': 'application/json',
             'Authorization': 'Bearer ' + self.twitch_app_token_json['access_token']
         }
