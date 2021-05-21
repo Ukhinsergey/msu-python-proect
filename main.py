@@ -40,7 +40,7 @@ def twitch_post():
 
 @app.route('/twitch-stat')
 def twitch_stat():
-    return twitch_api.twitch_app_token_json + str(twitch.answ)
+    return twitch_api.twitch_app_token_json + str(twitch_api.answ)
 
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
