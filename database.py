@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import create_engine, text
 
 engine = create_engine('sqlite:///test.db', echo=True, future=True)
@@ -18,7 +19,7 @@ class Database:
         self.table_name = table_name
         self.user_colname = 'ChatID'
         self.sub_colname = 'TwitchID'
-        self.engine = create_engine('sqlite:///test.db', echo=True, future=True)
+        self.engine = create_engine(os.environ.get('DATABASE_URL', 'sqlite:///test.db'), echo=True, future=True)
 
         
         # Create table if not exists
