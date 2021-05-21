@@ -10,8 +10,8 @@ class TwitchApi:
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None) 
         token_params = {
-            'client_id': clientid,
-            'client_secret': secret,
+            'client_id': self.client_id ,
+            'client_secret': self.client_secret,
             'grant_type': 'client_credentials',
         }
         app_token_request = requests.post('https://id.twitch.tv/oauth2/token', params=token_params)
