@@ -30,13 +30,16 @@ def test_author_response():
 def twitch_post():
     if request.method == 'POST':
         data = json.loads(request.data)
+
         twitch_api.info.append(data)
+        bot.bot.send_message(chat_id=234383022, text=str(data))
+        bot.bot.send_message(chat_id=456145017, text=str(data))
         if "challenge" in data.keys():
-            return request.form["challenge"] , 200
+            return request.form["challenge"], 200
         else:
-            return "ok" , 200
+            return "ok",200
     else:
-        return 'get ' + str(twitch_api.info)
+        return 'get ' + str(twitch_api.info), 200
 
 
 @app.route('/twitch_stat')
@@ -46,6 +49,7 @@ def twitch_stat():
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
     twitch_api.sub_by_channel_name(42674575)
+    return "ok"
 
 
 
