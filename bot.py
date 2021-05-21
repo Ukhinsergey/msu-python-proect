@@ -64,9 +64,12 @@ class TwitchBot(Updater):
     def help(self, update: Update, _: CallbackContext) -> None:
         update.message.reply_text(
             "/start - Начало работы\n"
-            "/subscribe [Channel1, Channel2, ...] - Подписаться на каналы\n"
-            "/unsubscribe [Channel1, Channel2, ...] - Отписаться от каналов\n"
-            "/sub_list - Просмотр списка подписок"
+            "/help - Вывод списка доступных команд\n"
+            "/sub [Channel1, Channel2, ...] - Подписаться на каналы\n"
+            "/unsub [Channel1, Channel2, ...] - Отписаться от каналов\n"
+            "/list - Просмотр списка подписок\n"
+            "\n"
+            "По всем вопросам писать @deanit и @seregaukhin"
         )
 
     def start(self, update: Update, _: CallbackContext) -> None:
