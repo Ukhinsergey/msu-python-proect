@@ -1,6 +1,6 @@
-import requests
 import json
 import os
+import requests
 
 
 
@@ -9,6 +9,8 @@ class TwitchApi:
     def __init__(self):
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None) 
+        self.info = []
+        self.answ = []
         token_params = {
             'client_id': self.client_id ,
             'client_secret': self.client_secret,
@@ -31,7 +33,26 @@ class TwitchApi:
             },
             "transport": {
                 "method": "webhook",
-                "callback": "https://heroku-testing-app228.herokuapp.com/",
+                "callback": "https://pytwitchbot.herokuapp.com/twitch_post",
                 "secret": self.client_secret 
             }
         }
+
+
+    def sub_by_channel_name(self, channel):
+        twitch_id = self.getid_by_channel_name(channel)
+        self.sub(twitch_id)
+
+
+    def sub(self, twitch_id):
+        self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
+        json_body = json.dumps(self.body)
+        ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions' ,data=json_body, headers=self.headers)
+        ans = ans.json()
+        self.answ.append(ans)
+
+
+    def getid_by_channel_name(self, channel):
+        return channel
+
+
