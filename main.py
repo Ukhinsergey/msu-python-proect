@@ -6,6 +6,7 @@ import os
 from flask import Flask, request
 from bot import TwitchBot
 from twitch import TwitchApi
+import json
 app = Flask(__name__)
 bot = TwitchBot()
 twitch_api = TwitchApi()
