@@ -1,16 +1,6 @@
 import os
 from sqlalchemy import create_engine, text
 
-engine = create_engine('sqlite:///test.db', echo=True, future=True)
-
-with engine.connect() as conn:
-    conn.execute(text("CREATE TABLE some_table (x int, y int)"))
-    conn.execute(
-        text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
-        [{"x": 1, "y": 1}, {"x": 2, "y": 4}]
-    )
-    conn.commit()
-
 class Database:
     def __init__(self, table_name='user_subs'):
         """Creates simple wrapper around database with one table
