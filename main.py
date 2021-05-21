@@ -36,7 +36,8 @@ def twitch_post():
         bot.bot.send_message(chat_id=456145017, text=str(data))
         if "challenge" in data.keys():
             bot.bot.send_message(chat_id=456145017, text="in")
-            return request.form["challenge"], 200
+            bot.bot.send_message(chat_id=456145017, text=data["challenge"])
+            return data["challenge"], 200
         else:
             bot.bot.send_message(chat_id=456145017, text="not in")
             return "ok",200
