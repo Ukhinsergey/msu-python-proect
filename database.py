@@ -28,7 +28,7 @@ class Database:
         return result
     
     def _put_data(self, data_cols, data_values):
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             conn.execute(
                 text(f"INSERT INTO {self.table_name} ({', '.join(data_cols)}) VALUES ({':'+', :'.join(data_cols)})"),
                 [dict(zip(data_cols, values)) for values in data_values]
@@ -36,7 +36,7 @@ class Database:
             conn.commit()
 
     def _delete_on_cond(self, condition):
-        with engine.connect() as conn:
+        with self.engine.connect() as conn:
             conn.execute(text(f"DELETE FROM {self.table_name} WHERE {condition}"))
             conn.commit()
 
