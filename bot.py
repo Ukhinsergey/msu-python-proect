@@ -58,7 +58,7 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CommandHandler("unsub", self.unsubscribe))
 
         self.dispatcher.add_handler(CommandHandler("help", self.help))
-        self.dispatcher.add_handler(CommandHandler("list_subs", self.list_subs))
+        self.dispatcher.add_handler(CommandHandler("list", self.list_subs))
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     def help(self, update: Update, _: CallbackContext) -> None:
@@ -73,6 +73,7 @@ class TwitchBot(Updater):
         chat_id = update.message.chat_id
         username = update.message.chat.username
         update.message.reply_text(text=f"Привет, {username}! chat_id = {chat_id}")
+        self.help(update, None)
 
     def subscribe(self, update: Update, _: CallbackContext) -> None:
         channels_to_subscribe = update.message.text.split()[1:]
@@ -114,11 +115,12 @@ class TwitchBot(Updater):
             )
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
-        result = self.database.get_subs_for_user(update.message.chat_id)
-        update.message.reply_text(
-            text="Подписки: " + '\n'.join(map(str, result))
-        )
-    
-    
-
-        
+        try:
+            result = self.database.get_subs_for_user(update.message.chat_id)
+            update.message.reply_text(
+                text="Ваши подписки:\n" + '\n'.join(map(str, result))
+            )
+        except Exception as exception:
+            update.message.reply_text(
+                text=f"Возникла ошибка при извлечении списка подписок.\nПричина: {exception}"
+            )
