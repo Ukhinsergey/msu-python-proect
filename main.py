@@ -39,7 +39,8 @@ def twitch_post():
             bot.bot.send_message(chat_id=456145017, text=data["challenge"])
             return data["challenge"], 200
         else:
-            bot.bot.send_message(chat_id=456145017, text="not in")
+            bot.bot.send_message(chat_id=234383022, text=str(data))
+            bot.bot.send_message(chat_id=456145017, text=str(data))
             return "ok",200
     else:
         return 'get ' + str(twitch_api.info), 200
