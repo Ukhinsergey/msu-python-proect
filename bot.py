@@ -103,40 +103,44 @@ class TwitchBot(Updater):
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
         if update.message is not None:
             channels_to_unsubscribe = update.message.text.split()[1:]
+            chat_id = update.message.chat_id
+            reply_func = update.message.reply_text
         else:
             channels_to_unsubscribe = update.callback_query.data.split()[1:]
+            chat_id = update.callback_query.message.chat_id
+            reply_func = update.callback_query.edit_message_text
 
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    self.database.delete_user_sub(update.message.chat_id, int(channel))
-                    update.message.reply_text(
+                    self.database.delete_user_sub(chat_id, int(channel))
+                    reply_func(
                         text=f"Успешная отписка от {channel}!"
                     )
                 except Exception as exception:
-                    update.message.reply_text(
+                    reply_func(
                         text=f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}"
                     )
         else:
-            update.message.reply_text(
-                text="Введите название канала, от которого хотите отписаться"
+            user_subs = self.database.get_subs_for_user(chat_id)
+            keyboard = [
+                InlineKeyboardButton(
+                    str(channel), callback_data=f"UNSUB_QUERY {channel}"
+                )
+                for channel in user_subs
+            ]
+            keyboard = InlineKeyboardMarkup.from_column(keyboard)
+            reply_func(
+                "Выберите канал, от которого хотите отписаться:",
+                reply_markup=keyboard
             )
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
-            keyboard = [
-                InlineKeyboardButton(
-                    str(channel), callback_data=f"UNSUB_QUERY {channel}"
-                )
-                for channel in result
-            ]
-            keyboard = InlineKeyboardMarkup.from_column(keyboard)
             update.message.reply_text(
                 text="Ваши подписки:\n" +
-                "\n".join(map(str, result)) +
-                "Чтобы отписаться, нажмите на кнопку:\n",
-                reply_markup=keyboard
+                "\n".join(map(str, result))
             )
 
         except Exception as exception:
