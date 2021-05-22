@@ -97,7 +97,7 @@ class TwitchBot(Updater):
                     )
         else:
             update.message.reply_text(
-                text="Введите название канала, на который хотите подписаться"
+                text="Вы должны ввести название канала, на который хотите подписаться"
             )
 
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
@@ -110,19 +110,20 @@ class TwitchBot(Updater):
             chat_id = update.callback_query.message.chat_id
             reply_func = update.callback_query.edit_message_text
 
+        user_subs = self.database.get_subs_for_user(chat_id)
+
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    self.database.delete_user_sub(chat_id, int(channel))
-                    reply_func(
-                        text=f"Успешная отписка от {channel}!"
-                    )
+                    if channel in user_subs:
+                        self.database.delete_user_sub(chat_id, int(channel))
+                        user_subs.remove(channel)
+                        reply_func(f"Успешная отписка от {channel}!")
+                    else:
+                        reply_func(f"Вы не подписаны на {channel}!")
                 except Exception as exception:
-                    reply_func(
-                        text=f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}"
-                    )
+                    reply_func(f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}")
         else:
-            user_subs = self.database.get_subs_for_user(chat_id)
             keyboard = [
                 InlineKeyboardButton(
                     str(channel), callback_data=f"UNSUB_QUERY {channel}"
@@ -138,10 +139,16 @@ class TwitchBot(Updater):
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
-            update.message.reply_text(
-                text="Ваши подписки:\n" +
-                "\n".join(map(str, result))
-            )
+            if len(result) > 0:
+                update.message.reply_text(
+                    text="Ваши подписки:\n" +
+                    "\n".join(map(str, result))
+                )
+            else:
+                update.message.reply_text(
+                    "У вас еще нет подписок!:\n"
+                    "Чтобы подписаться, воспользуйтесь командой /sub <Название канала>"
+                )
 
         except Exception as exception:
             update.message.reply_text(
