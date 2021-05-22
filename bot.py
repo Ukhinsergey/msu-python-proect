@@ -83,14 +83,17 @@ class TwitchBot(Updater):
     def subscribe(self, update: Update, _: CallbackContext) -> None:
         channels_to_subscribe = update.message.text.split()[1:]
 
+        user_subs = self.database.get_subs_for_user(update.message.chat_id)
+
         if len(channels_to_subscribe) >= 1:
             for channel in channels_to_subscribe:
                 try:
-                    # twitch.interface.subscribe_to_channel(channel) # Subscribe to one
-                    self.database.put_subs_for_user(update.message.chat_id, [int(channel)])
-                    update.message.reply_text(
-                        text=f"Успешная подписка на {channel}!"
-                    )
+                    if int(channel) not in user_subs:
+                        # twitch.interface.subscribe_to_channel(channel) # Subscribe to one
+                        self.database.put_subs_for_user(update.message.chat_id, [int(channel)])
+                        update.message.reply_text(f"Успешная подписка на {channel}!")
+                    else:
+                        update.message.reply_text(f"Вы уже подписаны на {channel}!")
                 except Exception as exception:
                     update.message.reply_text(
                         text=f"Возникла ошибка при подписке на {channel}.\nПричина: {exception}"
