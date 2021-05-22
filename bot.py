@@ -1,27 +1,19 @@
-#!/usr/bin/env python
-# pylint: disable=C0116
-# This program is dedicated to the public domain under the CC0 license.
-
 """
-Simple Bot to reply to Telegram messages.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
+Bot implementation using python-telegram-bot library
 """
 
 import logging
-import json
 import os
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext, CallbackQueryHandler
-from flask import request
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    MessageHandler,
+    Filters,
+    CallbackContext,
+    CallbackQueryHandler
+)
 
 from database import Database
 
@@ -34,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def echo(update: Update, _: CallbackContext) -> None:
-    """Echo the user message."""
+    """Echo the user message"""
     update.message.reply_text(update.message.text)
 
 
@@ -52,7 +44,7 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CommandHandler("start", self.start))
         self.dispatcher.add_handler(CommandHandler("help", self.help))
         self.dispatcher.add_handler(CommandHandler("list", self.list_subs))
-        
+
         self.dispatcher.add_handler(CommandHandler("subscribe", self.subscribe))
         self.dispatcher.add_handler(CommandHandler("sub", self.subscribe))
         self.dispatcher.add_handler(CallbackQueryHandler(self.subscribe, pattern="^SUB_QUERY"))
@@ -64,6 +56,7 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     def help(self, update: Update, _: CallbackContext) -> None:
+        """Send help-message"""
         update.message.reply_text(
             "/start - Начало работы\n"
             "/help - Вывод списка доступных команд\n"
@@ -75,12 +68,14 @@ class TwitchBot(Updater):
         )
 
     def start(self, update: Update, _: CallbackContext) -> None:
+        """Send welcome to a user along with help-message"""
         chat_id = update.message.chat_id
         username = update.message.chat.username
         update.message.reply_text(text=f"Привет, {username}! chat_id = {chat_id}")
         self.help(update, None)
 
     def subscribe(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling subscriptions"""
         channels_to_subscribe = update.message.text.split()[1:]
 
         user_subs = self.database.get_subs_for_user(update.message.chat_id)
@@ -104,6 +99,7 @@ class TwitchBot(Updater):
             )
 
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling unsubscriptions"""
         if update.message is not None:
             channels_to_unsubscribe = update.message.text.split()[1:]
             chat_id = update.message.chat_id
@@ -139,6 +135,7 @@ class TwitchBot(Updater):
             )
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling displaying of subscriptions"""
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
             if len(result) > 0:
