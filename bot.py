@@ -101,7 +101,10 @@ class TwitchBot(Updater):
             )
 
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
-        channels_to_unsubscribe = update.message.text.split()[1:]
+        if update.message is not None:
+            channels_to_unsubscribe = update.message.text.split()[1:]
+        else:
+            channels_to_unsubscribe = update.callback_query.data.split()[1:]
 
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
