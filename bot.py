@@ -115,9 +115,8 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    if channel in user_subs:
+                    if int(channel) in user_subs:
                         self.database.delete_user_sub(chat_id, int(channel))
-                        user_subs.remove(channel)
                         reply_func(f"Успешная отписка от {channel}!")
                     else:
                         reply_func(f"Вы не подписаны на {channel}!")
@@ -146,8 +145,9 @@ class TwitchBot(Updater):
                 )
             else:
                 update.message.reply_text(
-                    "У вас еще нет подписок!:\n"
-                    "Чтобы подписаться, воспользуйтесь командой /sub <Название канала>"
+                    "У вас еще нет подписок!\n"
+                    "Чтобы подписаться, воспользуйтесь командой\n"
+                    "/sub <Название канала>"
                 )
 
         except Exception as exception:
