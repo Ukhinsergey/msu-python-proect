@@ -122,17 +122,25 @@ class TwitchBot(Updater):
                 except Exception as exception:
                     reply_func(f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}")
         else:
-            keyboard = [
-                InlineKeyboardButton(
-                    str(channel), callback_data=f"UNSUB_QUERY {channel}"
+            if len(user_subs) > 0:
+                keyboard = [
+                    InlineKeyboardButton(
+                        str(channel), callback_data=f"UNSUB_QUERY {channel}"
+                    )
+                    for channel in user_subs
+                ]
+                keyboard = InlineKeyboardMarkup.from_column(keyboard)
+                reply_func(
+                    "Выберите канал, от которого хотите отписаться:",
+                    reply_markup=keyboard
                 )
-                for channel in user_subs
-            ]
-            keyboard = InlineKeyboardMarkup.from_column(keyboard)
-            reply_func(
-                "Выберите канал, от которого хотите отписаться:",
-                reply_markup=keyboard
-            )
+            else:
+                reply_func(
+                    "У вас еще нет подписок!\n"
+                    "Чтобы подписаться, воспользуйтесь командой\n"
+                    "/sub <Название канала>"
+                )
+
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling displaying of subscriptions"""
