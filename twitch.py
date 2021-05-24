@@ -42,7 +42,7 @@ class TwitchApi:
     def sub_by_channel_name(self, channel):
         twitch_id, display_name = self.get_twitch_user_by_name(channel)
         self.sub2(twitch_id)
-        return twitch_id, display_name
+        return int(twitch_id), display_name
 
     def get_twitch_user_by_name(self, channel_name):
         """get_twitch_user_by_name"""
