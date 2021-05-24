@@ -35,7 +35,7 @@ def twitch_post():
         if "challenge" in data.keys():
             return data["challenge"], 200
         else:
-            text_messsage = str(data['event']['user_name']) + " is following " + str(data['event']['broadcaster_user_name']) + " since " + str(data['event']['followed_at'])
+            text_messsage = str(data['event']['user_name']) + " is following " + str(data['event']['broadcaster_user_name'])
             bot.bot.send_message(chat_id=234383022, text=text_messsage)
             bot.bot.send_message(chat_id=456145017, text=text_messsage)
             return "ok",200
@@ -50,7 +50,7 @@ def twitch_stat():
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
     # twitch_api.get_twitch_user_by_name("Honeymad")
-    twitch_id, display_name = twitch_api.sub_by_channel_name("Kardippppppppppppppppppppppppppppppppppppppppppppp")
+    twitch_id, display_name = twitch_api.sub_by_channel_name("Kardipp")
     bot.bot.send_message(chat_id=456145017, text=str(twitch_id) + ' ' + str(display_name))
     return "ok"
 
