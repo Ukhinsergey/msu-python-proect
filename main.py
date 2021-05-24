@@ -21,9 +21,10 @@ def index():
     """A welcome message to test our server"""
     return "<h1>Welcome to our server !!</h1>"
 
-def send_notification(twitch_id, display_name):
+def send_notification(twitch_id: int, display_name: str) -> None:
+    """Sends a notification to all subscribed users. Updates display_name"""
     subscribed_users = bot.database.get_users_for_sub(twitch_id)
-    
+
     # Check if display name has changed
     saved_display_name = bot.database.get_channel_name(twitch_id)
     if saved_display_name != display_name:
@@ -32,7 +33,7 @@ def send_notification(twitch_id, display_name):
 
     for user_id in subscribed_users:
         bot.bot.send_message(
-            chat_id=user_id, 
+            chat_id=user_id,
             text=f"{display_name} is followed!"
         )
 
