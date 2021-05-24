@@ -9,7 +9,7 @@ from twitch import TwitchApi
 import json
 app = Flask(__name__)
 bot = TwitchBot()
-twitch_api = TwitchApi()
+twitch_api = TwitchApi(bot)
 
 
 @app.route('/')
@@ -57,6 +57,12 @@ def post_follow_dean1t():
 @app.route('/follow_dean1t')
 def show_info():
     return str(twitch_api.channel_names)
+
+
+@app.route('/unsubscribe_all')
+def unsubscribe_all():
+    twitch_api.unsubscribe_all()
+    return "done"
 
 
 if __name__ == '__main__':

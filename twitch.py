@@ -5,12 +5,13 @@ import requests
 
 class TwitchApi:
 
-    def __init__(self):
+    def __init__(self, bot = None):
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None) 
         self.info = []
         self.answ = []
         self.channel_names = []
+        self.bot = bot
         token_params = {
             'client_id': self.client_id ,
             'client_secret': self.client_secret,
@@ -59,4 +60,15 @@ class TwitchApi:
         ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions', data=json_body, headers=self.headers)
         ans = ans.json()
         self.answ.append(ans)
+
+
+    def unsubscribe_all(self):
+        ans = requests.get("https://api.twitch.tv/helix/eventsub/subscriptions", headers = self.headers)
+        ans = ans.json()
+        for i in ans['data']:
+            adr = i['id']
+            answ2 = requests.delete("ttps://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr, headers = self.headers)
+            answ2 = answ2.json()
+            self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
+            self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
 
