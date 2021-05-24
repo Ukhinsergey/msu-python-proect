@@ -86,11 +86,12 @@ class TwitchBot(Updater):
         if len(channels_to_subscribe) >= 1:
             for channel in channels_to_subscribe:
                 try:
-                    # display_name, twitch_id = channel, random.randint(0, 999999)
-                    twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel) # Subscribe to one
+                    twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
-                        self.database.put_channel_name(twitch_id, display_name)
+                        if len(self.database.get_channel_name(twitch_id)) == 0:
+                            self.twitch_api.sub(twitch_id)
+                            self.database.put_channel_name(twitch_id, display_name)
                         update.message.reply_text(f"Успешная подписка на {display_name}!")
                     else:
                         update.message.reply_text(f"Вы уже подписаны на {display_name}!")
@@ -119,10 +120,13 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    # display_name, twitch_id = channel, self.database._get_data(self.database.tw_channels_table, self.database.channel_colname, channel)[0]
                     twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id in user_subs:
                         self.database.delete_user_sub(chat_id, twitch_id)
+                        channel_subs = self.database.get_users_for_sub(twitch_id)
+                        if len(channel_subs):
+                            self.database.delete_channel_name(twitch_id)
+                            # self.twitch_api.unsubscribe(twitch_id)
                         reply_func(f"Успешная отписка от {display_name}!")
                     else:
                         reply_func(f"Вы не подписаны на {display_name}!")
