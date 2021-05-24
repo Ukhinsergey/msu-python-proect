@@ -48,6 +48,7 @@ class TwitchApi:
     def get_twitch_user_by_name(self, channel_name):
         req = '/helix/users?login='+channel_name
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
+        ans = ans.json()
         self.channel_names.append(ans)
 
 
