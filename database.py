@@ -66,7 +66,7 @@ class Database:
     def get_channel_name(self, twitch_id: int) -> List[str]:
         """Get list of channel names for 'twitch_id'"""
         result = self._get_data(self.subs_table, self.sub_colname, twitch_id)
-        return [cur[1] for cur in result]
+        return [cur[0] for cur in result]
 
     # Put functions
     def put_subs_for_user(self, chat_id: int, twitch_ids: List[int]) -> None:
