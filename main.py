@@ -49,7 +49,7 @@ def twitch_stat():
 
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
-    twitch_api.get_twitch_user_by_name("dean1t")
+    twitch_api.get_twitch_user_by_name("Honeymad")
     # twitch_api.sub_by_channel_name(42674575)
     return "ok"
 
