@@ -115,6 +115,7 @@ class TwitchBot(Updater):
             reply_func = update.callback_query.edit_message_text
 
         user_subs = self.database.get_subs_for_user(chat_id)
+        self.bot.send_message(chat_id=234383022, text=str(user_subs))
 
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
