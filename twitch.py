@@ -41,8 +41,9 @@ class TwitchApi:
 
 
     def sub_by_channel_name(self, channel):
-        twitch_id = self.getid_by_channel_name(channel)
+        twitch_id, display_name = self.get_twitch_user_by_name(channel)
         self.sub(twitch_id)
+        return twitch_id, display_name
 
 
     def get_twitch_user_by_name(self, channel_name):
@@ -50,6 +51,7 @@ class TwitchApi:
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
         self.channel_names.append(ans)
+        return ans['data'][0]['id'], ans['data'][0]['display_name']
 
 
     def sub(self, twitch_id):
