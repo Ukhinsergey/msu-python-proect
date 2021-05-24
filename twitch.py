@@ -49,10 +49,12 @@ class TwitchApi:
     def get_twitch_user_by_name(self, channel_name):
         req = '/helix/users?login='+channel_name
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
-        ans = ans.json()
-        self.channel_names.append(ans)
-        return ans['data'][0]['id'], ans['data'][0]['display_name']
-
+        if ans.status_code == requests.codes.ok:
+            ans = ans.json()
+            self.channel_names.append(ans)
+            return ans['data'][0]['id'], ans['data'][0]['display_name']
+        else:
+            raise RuntimeError(str(ans.json()))
 
     def sub(self, twitch_id):
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
