@@ -54,6 +54,8 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CommandHandler("unsub", self.unsubscribe))
         self.dispatcher.add_handler(CallbackQueryHandler(self.unsubscribe, pattern="^UNSUB_QUERY"))
 
+        self.dispatcher.add_handler(CallbackQueryHandler(self.channel_info, pattern="^CHANNEL_INFO_QUERY"))
+
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     def register_twitch_api(self, twitch_api):
@@ -161,9 +163,16 @@ class TwitchBot(Updater):
             result = self.database.get_subs_for_user(update.message.chat_id)
             channel_names = [self.database.get_channel_name(twitch_id)[0] for twitch_id in result]
             if len(result) > 0:
+                keyboard = [
+                    InlineKeyboardButton(
+                        str(channel), callback_data=f"CHANNEL_INFO_QUERY {channel}"
+                    )
+                    for channel in channel_names
+                ]
+                keyboard = InlineKeyboardMarkup.from_column(keyboard)
                 update.message.reply_text(
-                    text="Ваши подписки:\n" +
-                    "\n".join(map(str, zip(result, channel_names)))
+                    "Список ваших подписок:\nНажмите, чтобы узнать информацию о канале",
+                    reply_markup=keyboard
                 )
             else:
                 update.message.reply_text(
@@ -176,3 +185,19 @@ class TwitchBot(Updater):
             update.message.reply_text(
                 text=f"Возникла ошибка при извлечении списка подписок.\nПричина: {exception}"
             )
+
+    def channel_info(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling extracting info about channel"""
+        channel = update.callback_query.data.split()[1]
+        chat_id = update.callback_query.message.chat_id
+        
+        try:
+            update.callback_query.edit_message_text(
+                text=f"Информация о {channel}"
+            )
+        except Exception as exception:
+            update.callback_query.edit_message_text(
+                text=f"Возникла ошибка при извлечении информации о канале.\nПричина: {exception}"
+            )
+
+
