@@ -4,6 +4,7 @@ Bot implementation using python-telegram-bot library
 
 import logging
 import os
+import random
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
@@ -83,12 +84,14 @@ class TwitchBot(Updater):
         if len(channels_to_subscribe) >= 1:
             for channel in channels_to_subscribe:
                 try:
-                    if int(channel) not in user_subs:
-                        # twitch.interface.subscribe_to_channel(channel) # Subscribe to one
-                        self.database.put_subs_for_user(update.message.chat_id, [int(channel)])
-                        update.message.reply_text(f"Успешная подписка на {channel}!")
+                    display_name, twitch_id = channel, random.randint(0, 999999)
+                    # display_name, twitch_id = twitch.subscribe_to_channel(channel) # Subscribe to one
+                    if twitch_id not in user_subs:
+                        self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
+                        self.database.put_channel_name(twitch_id, display_name)
+                        update.message.reply_text(f"Успешная подписка на {display_name}!")
                     else:
-                        update.message.reply_text(f"Вы уже подписаны на {channel}!")
+                        update.message.reply_text(f"Вы уже подписаны на {display_name}!")
                 except Exception as exception:
                     update.message.reply_text(
                         text=f"Возникла ошибка при подписке на {channel}.\nПричина: {exception}"
@@ -114,20 +117,22 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    if int(channel) in user_subs:
-                        self.database.delete_user_sub(chat_id, int(channel))
-                        reply_func(f"Успешная отписка от {channel}!")
+                    display_name, twitch_id = channel, self.database._get_data(self.database.tw_channels_table, self.database.channel_colname, channel)[0]
+                    if twitch_id in user_subs:
+                        self.database.delete_user_sub(chat_id, twitch_id)
+                        reply_func(f"Успешная отписка от {display_name}!")
                     else:
-                        reply_func(f"Вы не подписаны на {channel}!")
+                        reply_func(f"Вы не подписаны на {display_name}!")
                 except Exception as exception:
                     reply_func(f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}")
         else:
             if len(user_subs) > 0:
+                channel_names = [self.database.get_channel_name(twitch_id) for twitch_id in user_subs]
                 keyboard = [
                     InlineKeyboardButton(
                         str(channel), callback_data=f"UNSUB_QUERY {channel}"
                     )
-                    for channel in user_subs
+                    for channel in channel_names
                 ]
                 keyboard = InlineKeyboardMarkup.from_column(keyboard)
                 reply_func(
@@ -146,10 +151,11 @@ class TwitchBot(Updater):
         """Bot function handling displaying of subscriptions"""
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
+            channel_names = [self.database.get_channel_name(twitch_id) for twitch_id in result]
             if len(result) > 0:
                 update.message.reply_text(
                     text="Ваши подписки:\n" +
-                    "\n".join(map(str, result))
+                    "\n".join(map(str, zip(result, channel_names)))
                 )
             else:
                 update.message.reply_text(
