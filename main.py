@@ -53,6 +53,9 @@ def post_follow_dean1t():
     # twitch_api.sub_by_channel_name(42674575)
     return "ok"
 
+@app.route('/follow_dean1t')
+def show_info():
+    return str(twitch_api.channel_names)
 
 
 if __name__ == '__main__':
