@@ -11,6 +11,7 @@ class TwitchApi:
         self.client_secret = os.environ.get("CLIENT_SECRET", None) 
         self.info = []
         self.answ = []
+        self.channel_names = []
         token_params = {
             'client_id': self.client_id ,
             'client_secret': self.client_secret,
@@ -42,6 +43,12 @@ class TwitchApi:
     def sub_by_channel_name(self, channel):
         twitch_id = self.getid_by_channel_name(channel)
         self.sub(twitch_id)
+
+
+    def get_twitch_user_by_name(channel_name):
+        req = '/helix/users?login='+channel_name
+        ans  = requests.get("api.twitch.tv" + req, headers = twitch_headers)
+        self.channel_names.append(ans)
 
 
     def sub(self, twitch_id):

@@ -32,10 +32,7 @@ def twitch_post():
         data = json.loads(request.data)
 
         twitch_api.info.append(data)
-        # bot.bot.send_message(chat_id=234383022, text=str(data))
-        bot.bot.send_message(chat_id=456145017, text=str(data))
         if "challenge" in data.keys():
-            bot.bot.send_message(chat_id=456145017, text="in")
             bot.bot.send_message(chat_id=456145017, text=data["challenge"])
             return data["challenge"], 200
         else:
@@ -52,7 +49,8 @@ def twitch_stat():
 
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
-    twitch_api.sub_by_channel_name(42674575)
+    twitch_api.get_twitch_user_by_name("dean1t")
+    # twitch_api.sub_by_channel_name(42674575)
     return "ok"
 
 
