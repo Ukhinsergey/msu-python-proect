@@ -17,7 +17,7 @@ from telegram.ext import (
 )
 
 from database import Database
-from main import twitch_api
+from twitch import TwitchApi
 
 # Enable logging
 logging.basicConfig(
@@ -38,6 +38,7 @@ class TwitchBot(Updater):
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
         self.database = Database()
+        self.twitch_api = TwitchApi()
         self._add_handlers()
 
         self.start_polling()
@@ -86,7 +87,7 @@ class TwitchBot(Updater):
             for channel in channels_to_subscribe:
                 try:
                     # display_name, twitch_id = channel, random.randint(0, 999999)
-                    twitch_id, display_name = twitch_api.get_twitch_user_by_name(channel) # Subscribe to one
+                    twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel) # Subscribe to one
                     if twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         self.database.put_channel_name(twitch_id, display_name)
@@ -119,7 +120,7 @@ class TwitchBot(Updater):
             for channel in channels_to_unsubscribe:
                 try:
                     # display_name, twitch_id = channel, self.database._get_data(self.database.tw_channels_table, self.database.channel_colname, channel)[0]
-                    twitch_id, display_name = twitch_api.get_twitch_user_by_name(channel)
+                    twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id in user_subs:
                         self.database.delete_user_sub(chat_id, twitch_id)
                         reply_func(f"Успешная отписка от {display_name}!")
