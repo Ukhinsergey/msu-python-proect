@@ -17,6 +17,7 @@ from telegram.ext import (
 )
 
 from database import Database
+from main import twitch_api
 
 # Enable logging
 logging.basicConfig(
@@ -84,8 +85,8 @@ class TwitchBot(Updater):
         if len(channels_to_subscribe) >= 1:
             for channel in channels_to_subscribe:
                 try:
-                    display_name, twitch_id = channel, random.randint(0, 999999)
-                    # display_name, twitch_id = twitch.subscribe_to_channel(channel) # Subscribe to one
+                    # display_name, twitch_id = channel, random.randint(0, 999999)
+                    twitch_id, display_name = twitch_api.get_twitch_user_by_name(channel) # Subscribe to one
                     if twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         self.database.put_channel_name(twitch_id, display_name)
@@ -117,7 +118,8 @@ class TwitchBot(Updater):
         if len(channels_to_unsubscribe) >= 1:
             for channel in channels_to_unsubscribe:
                 try:
-                    display_name, twitch_id = channel, self.database._get_data(self.database.tw_channels_table, self.database.channel_colname, channel)[0]
+                    # display_name, twitch_id = channel, self.database._get_data(self.database.tw_channels_table, self.database.channel_colname, channel)[0]
+                    twitch_id, display_name = twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id in user_subs:
                         self.database.delete_user_sub(chat_id, twitch_id)
                         reply_func(f"Успешная отписка от {display_name}!")
@@ -127,7 +129,7 @@ class TwitchBot(Updater):
                     reply_func(f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}")
         else:
             if len(user_subs) > 0:
-                channel_names = [self.database.get_channel_name(twitch_id) for twitch_id in user_subs]
+                channel_names = [self.database.get_channel_name(twitch_id)[0] for twitch_id in user_subs]
                 keyboard = [
                     InlineKeyboardButton(
                         str(channel), callback_data=f"UNSUB_QUERY {channel}"
@@ -151,7 +153,7 @@ class TwitchBot(Updater):
         """Bot function handling displaying of subscriptions"""
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
-            channel_names = [self.database.get_channel_name(twitch_id) for twitch_id in result]
+            channel_names = [self.database.get_channel_name(twitch_id)[0] for twitch_id in result]
             if len(result) > 0:
                 update.message.reply_text(
                     text="Ваши подписки:\n" +
