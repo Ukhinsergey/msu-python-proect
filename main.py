@@ -50,7 +50,7 @@ def twitch_stat():
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
     # twitch_api.get_twitch_user_by_name("Honeymad")
-    twitch_id, display_name = twitch_api.sub_by_channel_name("DeAn1t")
+    twitch_id, display_name = twitch_api.sub_by_channel_name("Kardipp")
     bot.bot.send_message(chat_id=456145017, text=str(twitch_id) + ' ' + str(display_name))
     return "ok"
 
