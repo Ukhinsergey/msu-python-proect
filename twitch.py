@@ -7,7 +7,7 @@ class TwitchApi:
 
     def __init__(self, bot = None):
         self.client_id = os.environ.get("CLIENT_ID", None)
-        self.client_secret = os.environ.get("CLIENT_SECRET", None) 
+        self.client_secret = os.environ.get("CLIENT_SECRET", None)
         self.info = []
         self.answ = []
         self.channel_names = []
@@ -35,14 +35,14 @@ class TwitchApi:
             "transport": {
                 "method": "webhook",
                 "callback": "https://pytwitchbot.herokuapp.com/twitch_post",
-                "secret": self.client_secret 
+                "secret": self.client_secret
             }
         }
 
     def sub_by_channel_name(self, channel):
         twitch_id, display_name = self.get_twitch_user_by_name(channel)
         self.sub2(twitch_id)
-        return int(twitch_id), display_name
+        return twitch_id, display_name
 
     def get_twitch_user_by_name(self, channel_name):
         """get_twitch_user_by_name"""
@@ -50,9 +50,9 @@ class TwitchApi:
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
         self.channel_names.append(ans)
-        if len(ans['data']) == 0: 
+        if len(ans['data']) == 0:
             raise RuntimeError("no such user")
-        return ans['data'][0]['id'], ans['data'][0]['display_name']
+        return int(ans['data'][0]['id']), ans['data'][0]['display_name']
 
     def sub(self, twitch_id):
         self.body['type'] = "channel.follow"
@@ -79,4 +79,3 @@ class TwitchApi:
             answ2 = requests.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr, headers = self.headers)
             self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
-
