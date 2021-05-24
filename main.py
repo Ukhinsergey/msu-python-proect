@@ -11,6 +11,8 @@ app = Flask(__name__)
 bot = TwitchBot()
 twitch_api = TwitchApi(bot)
 
+bot.register_twitch_api(twitch_api)
+
 
 @app.route('/')
 def index():

@@ -17,7 +17,6 @@ from telegram.ext import (
 )
 
 from database import Database
-from twitch import TwitchApi
 
 # Enable logging
 logging.basicConfig(
@@ -38,7 +37,6 @@ class TwitchBot(Updater):
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
         self.database = Database()
-        self.twitch_api = TwitchApi()
         self._add_handlers()
 
         self.start_polling()
@@ -57,6 +55,9 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CallbackQueryHandler(self.unsubscribe, pattern="^UNSUB_QUERY"))
 
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    def register_twitch_api(self, twitch_api):
+        self.twitch_api = twitch_api
 
     def help(self, update: Update, _: CallbackContext) -> None:
         """Send help-message"""
@@ -124,7 +125,7 @@ class TwitchBot(Updater):
                     if twitch_id in user_subs:
                         self.database.delete_user_sub(chat_id, twitch_id)
                         channel_subs = self.database.get_users_for_sub(twitch_id)
-                        if len(channel_subs):
+                        if len(channel_subs) == 0:
                             self.database.delete_channel_name(twitch_id)
                             # self.twitch_api.unsubscribe(twitch_id)
                         reply_func(f"Успешная отписка от {display_name}!")
