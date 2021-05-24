@@ -41,7 +41,7 @@ class TwitchApi:
 
     def sub_by_channel_name(self, channel):
         twitch_id, display_name = self.get_twitch_user_by_name(channel)
-        self.sub(twitch_id)
+        self.sub2(twitch_id)
         return twitch_id, display_name
 
     def get_twitch_user_by_name(self, channel_name):
@@ -55,6 +55,15 @@ class TwitchApi:
         return ans['data'][0]['id'], ans['data'][0]['display_name']
 
     def sub(self, twitch_id):
+        self.body['type'] = "channel.follow"
+        self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
+        json_body = json.dumps(self.body)
+        ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions', data=json_body, headers=self.headers)
+        ans = ans.json()
+        self.answ.append(ans)
+
+    def sub2(self, twitch_id):
+        self.body['type'] = "stream.online"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
         json_body = json.dumps(self.body)
         ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions', data=json_body, headers=self.headers)
