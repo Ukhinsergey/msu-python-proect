@@ -33,11 +33,11 @@ def twitch_post():
 
         twitch_api.info.append(data)
         if "challenge" in data.keys():
-            bot.bot.send_message(chat_id=456145017, text=data["challenge"])
             return data["challenge"], 200
         else:
-            bot.bot.send_message(chat_id=234383022, text=str(data))
-            bot.bot.send_message(chat_id=456145017, text=str(data))
+            text_messsage = str(data['event']['user_name']) + " is following " + str(data['event']['broadcaster_user_name']) + " since " + str(data['event']['followed_at'])
+            bot.bot.send_message(chat_id=234383022, text=text_messsage)
+            bot.bot.send_message(chat_id=456145017, text=text_messsage)
             return "ok",200
     else:
         return 'get ' + str(twitch_api.info), 200
