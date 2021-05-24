@@ -51,7 +51,7 @@ class TwitchApi:
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
         self.channel_names.append(ans)
-        if len(ans['data'][0]) == 0: 
+        if len(ans['data']) == 0: 
             raise RuntimeError("no such user")
         return ans['data'][0]['id'], ans['data'][0]['display_name']
 
