@@ -2,6 +2,7 @@
 # pylint: disable=broad-except
 import logging
 import os
+from time import strftime, strptime
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
@@ -14,6 +15,7 @@ from telegram.ext import (
 )
 
 from database import Database
+from twitch import TwitchApi
 
 # Enable logging
 logging.basicConfig(
@@ -78,7 +80,7 @@ class TwitchBot(Updater):
 
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
-    def register_twitch_api(self, twitch_api):
+    def register_twitch_api(self, twitch_api: TwitchApi) -> None:
         """Register twitch api."""
         self.twitch_api = twitch_api
 
@@ -194,11 +196,28 @@ class TwitchBot(Updater):
     def channel_info(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling extracting info about channel."""
         channel = update.callback_query.data.split()[1]
-
         try:
-            update.callback_query.edit_message_text(
-                text=f"Информация о {channel}"
-            )
+            response = self.twitch_api.check_online(channel)
+            data = response['data']
+            if len(data) > 0:
+                data = data[0]
+                starting_time = strftime(
+                    "%H:%M", 
+                    strptime(
+                        data['started_at'], 
+                        "%Y-%m-%dT%H:%M:%SZ"
+                    )
+                )
+                update.callback_query.edit_message_text(
+                    f"{channel} стримит {data['game_name']} с {starting_time}!\n"
+                    f"{data['title']}\n"
+                    "\n"
+                    f"https://twitch.tv/{channel}\n"
+                )
+            else:
+                update.callback_query.edit_message_text(
+                    f"{channel} не онлайн."
+                )
         except Exception as exception:
             update.callback_query.edit_message_text(
                 text=f"Возникла ошибка при извлечении информации о канале.\nПричина: {exception}"
