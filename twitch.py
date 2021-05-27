@@ -103,7 +103,7 @@ class TwitchApi:
 
     def check_online(self, channel_name):
         twitch_id, name = self.get_twitch_user_by_name(channel_name)
-        req = 'https://api.twitch.tv/helix/streams?user_id='+twitch_id
+        req = 'https://api.twitch.tv/helix/streams?user_id='+str(twitch_id)
         ans = requests.get(req, headers =self.headers)
         ans = ans.json()
         return ans
