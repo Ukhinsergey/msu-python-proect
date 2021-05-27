@@ -89,7 +89,7 @@ class TwitchApi:
         )
         ans = ans.json()
         for i in ans['data']:
-            if i['condition']['broadcaster_user_id'] == str(broadcaster_user_id):
+            if str(i['condition']['broadcaster_user_id']) == str(broadcaster_user_id):
                 adr = i['id']
                 answ2 = requests.delete(
                     "https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr,
@@ -97,6 +97,9 @@ class TwitchApi:
                 )
                 self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
                 self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
+            self.bot.bot.send_message(chat_id=456145017, text=str(ans))
+
+
 
     def unsubscribe_all(self):
         """Unsubscribe from all events (admins-only)."""
