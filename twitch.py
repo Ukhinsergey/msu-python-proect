@@ -89,7 +89,7 @@ class TwitchApi:
         )
         ans = ans.json()
         for i in ans['data']:
-            if i['broadcaster_user_id'] == str(broadcaster_user_id):
+            if i['condition']['broadcaster_user_id'] == str(broadcaster_user_id):
                 adr = i['id']
                 answ2 = requests.delete(
                     "https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr,
