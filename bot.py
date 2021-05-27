@@ -216,6 +216,8 @@ class TwitchBot(Updater):
             else:
                 update.callback_query.edit_message_text(
                     f"{channel} не онлайн."
+                    "\n"
+                    f"https://twitch.tv/{channel}\n"
                 )
         except Exception as exception:
             update.callback_query.edit_message_text(

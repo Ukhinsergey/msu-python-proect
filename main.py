@@ -36,22 +36,21 @@ def send_notification(twitch_id: int, display_name: str) -> None:
             text=f"{display_name} is followed!"
         )
 
-@app.route('/twitch_post', methods=['GET', 'POST'])
+@app.route('/twitch_post', methods=['POST'])
 def twitch_post():
     """Process main twitch requests."""
-    if request.method == 'POST':
-        data = json.loads(request.data)
+    data = json.loads(request.data)
 
-        if "challenge" in data.keys():
-            return data["challenge"], 200
-        else:
-            if data['subscription']['type'] == "channel.follow":
-                send_notification(int(data['event']['broadcaster_user_id']), data['event']['broadcaster_user_name'])
-            elif data['subscription']['type'] == "stream.online":
-                pass
-            return "ok", 200
-    else:
-        return 'get', 200
+    if "challenge" in data.keys():
+        return data["challenge"], 200
+
+    if data['subscription']['type'] == "channel.follow":
+        twitch_id = int(data['event']['broadcaster_user_id'])
+        display_name = data['event']['broadcaster_user_name']
+        send_notification(twitch_id, display_name)
+    elif data['subscription']['type'] == "stream.online":
+        pass
+    return "ok", 200
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 443))

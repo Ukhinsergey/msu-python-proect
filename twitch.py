@@ -1,5 +1,4 @@
 """TODO: module-docstring."""
-# pylint: disable=too-many-instance-attributes
 import json
 import os
 import requests

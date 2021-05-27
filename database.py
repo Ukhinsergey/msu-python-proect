@@ -1,4 +1,5 @@
 """TODO: module-docstring."""
+# pylint: disable=line-too-long
 
 import os
 from typing import List, Tuple
@@ -11,8 +12,8 @@ class Database:
     def __init__(self, subs_table='user_subs', tw_channels_table='twitch_channels'):
         """Create simple wrapper around database with one table.
 
-        subs_table : str [default='user_subs'] - name of table (ChatID int, TwitchID int)
-        tw_channels_table : str [default='twitch_channels'] - name of table (TwitchID int, ChannelName str)
+        subs_table        : str - name of table (ChatID int, TwitchID int)
+        tw_channels_table : str - name of table (TwitchID int, ChannelName str)
         """
         self.subs_table = subs_table
         self.tw_channels_table = tw_channels_table
