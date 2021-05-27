@@ -75,7 +75,7 @@ def post_follow_dean1t():
 @app.route('/follow_dean1t')
 def show_info():
     """Test, will be deleted."""
-    return str(twitch_api.check_online("SilverName"))
+    return str(twitch_api.check_online("70075625"))
 
 
 @app.route('/check_id')
