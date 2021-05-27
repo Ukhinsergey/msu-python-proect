@@ -75,7 +75,7 @@ def post_follow_dean1t():
 @app.route('/follow_dean1t')
 def show_info():
     """Test, will be deleted."""
-    return str(twitch_api.channel_names)
+    return str(twitch_api.check_online("dean1t"))
 
 
 @app.route('/unsubscribe_all')
