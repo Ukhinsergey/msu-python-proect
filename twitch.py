@@ -97,7 +97,10 @@ class TwitchApi:
                 )
                 self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
                 self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
-            self.bot.bot.send_message(chat_id=456145017, text=str(ans))
+            self.bot.bot.send_message(chat_id=456145017, text=str(i))
+            self.bot.bot.send_message(chat_id=456145017, text=str(i['condition']['broadcaster_user_id']))
+            self.bot.bot.send_message(chat_id=456145017, text=str(broadcaster_user_id))
+            
 
 
 
