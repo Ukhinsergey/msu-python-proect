@@ -1,6 +1,4 @@
-"""
-Bot implementation using python-telegram-bot library
-"""
+"""Bot implementation using python-telegram-bot library."""
 
 import logging
 import os
@@ -27,13 +25,33 @@ logger = logging.getLogger(__name__)
 
 
 def echo(update: Update, _: CallbackContext) -> None:
-    """Echo the user message"""
+    """Echo the user message."""
     update.message.reply_text(update.message.text)
 
+def help_fun(update: Update, _: CallbackContext) -> None:
+    """Send help-message."""
+    update.message.reply_text(
+        "/start - Начало работы\n"
+        "/help - Вывод списка доступных команд\n"
+        "/sub [Channel1, Channel2, ...] - Подписаться на каналы\n"
+        "/unsub [Channel1, Channel2, ...] - Отписаться от каналов\n"
+        "/list - Просмотр списка подписок\n"
+        "\n"
+        "По всем вопросам писать @deanit и @seregaukhin"
+    )
+
+def start(update: Update, _: CallbackContext) -> None:
+    """Send welcome to a user along with help-message."""
+    chat_id = update.message.chat_id
+    username = update.message.chat.username
+    update.message.reply_text(text=f"Привет, {username}! chat_id = {chat_id}")
+    help_fun(update, None)
 
 class TwitchBot(Updater):
-    """Main bot class"""
+    """Main bot class."""
+
     def __init__(self) -> None:
+        """Initialize bot."""
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
         self.database = Database()
@@ -42,8 +60,8 @@ class TwitchBot(Updater):
         self.start_polling()
 
     def _add_handlers(self) -> None:
-        self.dispatcher.add_handler(CommandHandler("start", self.start))
-        self.dispatcher.add_handler(CommandHandler("help", self.help))
+        self.dispatcher.add_handler(CommandHandler("start", start))
+        self.dispatcher.add_handler(CommandHandler("help", help_fun))
         self.dispatcher.add_handler(CommandHandler("list", self.list_subs))
 
         self.dispatcher.add_handler(CommandHandler("subscribe", self.subscribe))
@@ -59,29 +77,12 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
     def register_twitch_api(self, twitch_api):
+        """Register twitch api."""
         self.twitch_api = twitch_api
 
-    def help(self, update: Update, _: CallbackContext) -> None:
-        """Send help-message"""
-        update.message.reply_text(
-            "/start - Начало работы\n"
-            "/help - Вывод списка доступных команд\n"
-            "/sub [Channel1, Channel2, ...] - Подписаться на каналы\n"
-            "/unsub [Channel1, Channel2, ...] - Отписаться от каналов\n"
-            "/list - Просмотр списка подписок\n"
-            "\n"
-            "По всем вопросам писать @deanit и @seregaukhin"
-        )
-
-    def start(self, update: Update, _: CallbackContext) -> None:
-        """Send welcome to a user along with help-message"""
-        chat_id = update.message.chat_id
-        username = update.message.chat.username
-        update.message.reply_text(text=f"Привет, {username}! chat_id = {chat_id}")
-        self.help(update, None)
 
     def subscribe(self, update: Update, _: CallbackContext) -> None:
-        """Bot function handling subscriptions"""
+        """Bot function handling subscriptions."""
         channels_to_subscribe = update.message.text.split()[1:]
 
         user_subs = self.database.get_subs_for_user(update.message.chat_id)
@@ -108,7 +109,7 @@ class TwitchBot(Updater):
             )
 
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
-        """Bot function handling unsubscriptions"""
+        """Bot function handling unsubscriptions."""
         if update.message is not None:
             channels_to_unsubscribe = update.message.text.split()[1:]
             chat_id = update.message.chat_id
@@ -158,7 +159,7 @@ class TwitchBot(Updater):
 
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
-        """Bot function handling displaying of subscriptions"""
+        """Bot function handling displaying of subscriptions."""
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
             channel_names = [self.database.get_channel_name(twitch_id)[0] for twitch_id in result]
@@ -187,7 +188,7 @@ class TwitchBot(Updater):
             )
 
     def channel_info(self, update: Update, _: CallbackContext) -> None:
-        """Bot function handling extracting info about channel"""
+        """Bot function handling extracting info about channel."""
         channel = update.callback_query.data.split()[1]
         chat_id = update.callback_query.message.chat_id
         

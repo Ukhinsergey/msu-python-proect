@@ -1,6 +1,4 @@
-"""
-TODO: Module docstring
-"""
+"""TODO: Module docstring."""
 import os
 import json
 
@@ -18,11 +16,11 @@ bot.register_twitch_api(twitch_api)
 
 @app.route('/')
 def index():
-    """A welcome message to test our server"""
+    """Return a welcome message to test our server."""
     return "<h1>Welcome to our server !!</h1>"
 
 def send_notification(twitch_id: int, display_name: str) -> None:
-    """Sends a notification to all subscribed users. Updates display_name"""
+    """Send a notification to all subscribed users. Updates display_name."""
     subscribed_users = bot.database.get_users_for_sub(twitch_id)
 
     # Check if display name has changed
@@ -39,6 +37,7 @@ def send_notification(twitch_id: int, display_name: str) -> None:
 
 @app.route('/twitch_post', methods=['GET', 'POST'])
 def twitch_post():
+    """Process main twitch requests."""
     if request.method == 'POST':
         data = json.loads(request.data)
 
@@ -62,10 +61,12 @@ def twitch_post():
 
 @app.route('/twitch_stat')
 def twitch_stat():
+    """Test, will be deleted."""
     return str(twitch_api.twitch_app_token_json) + str(twitch_api.answ)
 
 @app.route('/post_follow_dean1t')
 def post_follow_dean1t():
+    """Test, will be deleted."""
     # twitch_api.get_twitch_user_by_name("Honeymad")
     twitch_id, display_name = twitch_api.sub_by_channel_name("dean1t")
     bot.bot.send_message(chat_id=456145017, text=str(twitch_id) + ' ' + str(display_name))
@@ -73,11 +74,13 @@ def post_follow_dean1t():
 
 @app.route('/follow_dean1t')
 def show_info():
+    """Test, will be deleted."""
     return str(twitch_api.channel_names)
 
 
 @app.route('/unsubscribe_all')
 def unsubscribe_all():
+    """Test, will be deleted."""
     twitch_api.unsubscribe_all()
     return "done"
 

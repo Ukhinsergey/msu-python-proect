@@ -1,11 +1,16 @@
+"""TODO: module-docstring."""
+
 import os
 from typing import List, Tuple
 
 from sqlalchemy import create_engine, text
 
 class Database:
+    """TODO: class-docstring."""
+
     def __init__(self, subs_table='user_subs', tw_channels_table='twitch_channels'):
-        """Creates simple wrapper around database with one table
+        """Create simple wrapper around database with one table.
+
         subs_table : str [default='user_subs'] - name of table (ChatID int, TwitchID int)
         tw_channels_table : str [default='twitch_channels'] - name of table (TwitchID int, ChannelName str)
         """
@@ -31,7 +36,9 @@ class Database:
 
     # Internal functions
     def _get_data(self, table_name: str, data_col: str, data_value: object) -> List[object]:
-        """Get data with the following select
+        """Get data with the simple SQL select.
+
+        SQL query:
         'SELECT * FROM {table_name} WHERE {data_col}={data_value}'
         """
         with self.engine.connect() as conn:
@@ -40,6 +47,11 @@ class Database:
         return result
 
     def _put_data(self, table_name: str, data_cols: Tuple[str, str], data_values: List[Tuple[object, object]]) -> None:
+        """Put data with the simple SQL insert.
+
+        SQL query:
+        'INSERT INTO {table_name} (data_cols) VALUES (:data_values)'
+        """
         with self.engine.connect() as conn:
             conn.execute(
                 text(f"INSERT INTO {table_name} ({', '.join(data_cols)}) VALUES ({':'+', :'.join(data_cols)})"),
@@ -48,29 +60,34 @@ class Database:
             conn.commit()
 
     def _delete_on_cond(self, table_name: str, condition: str) -> None:
+        """Delete data with the simple SQL delete.
+
+        SQL query:
+        'DELETE FROM {table_name} WHERE {condition}'
+        """
         with self.engine.connect() as conn:
             conn.execute(text(f"DELETE FROM {table_name} WHERE {condition}"))
             conn.commit()
 
     # Get functions
     def get_subs_for_user(self, chat_id: int) -> List[int]:
-        """Get list of subscriptions for user 'chat_id'"""
+        """Get list of subscriptions for user 'chat_id'."""
         result = self._get_data(self.subs_table, self.user_colname, chat_id)
         return [cur[1] for cur in result]
 
     def get_users_for_sub(self, twitch_id: int) -> List[int]:
-        """Get list of users subscribed for twitch channel with 'twitch_id'"""
+        """Get list of users subscribed for twitch channel with 'twitch_id'."""
         result = self._get_data(self.subs_table, self.sub_colname, twitch_id)
         return [cur[0] for cur in result]
 
     def get_channel_name(self, twitch_id: int) -> List[str]:
-        """Get list of channel names for 'twitch_id'"""
+        """Get list of channel names for 'twitch_id'."""
         result = self._get_data(self.tw_channels_table, self.sub_colname, twitch_id)
         return [cur[1] for cur in result]
 
     # Put functions
     def put_subs_for_user(self, chat_id: int, twitch_ids: List[int]) -> None:
-        """Put list of subscriptions 'twitch_ids' for user 'chat_id'"""
+        """Put list of subscriptions 'twitch_ids' for user 'chat_id'."""
         self._put_data(
             self.subs_table,
             [self.user_colname, self.sub_colname],
@@ -78,6 +95,7 @@ class Database:
         )
 
     def put_channel_name(self, twitch_id: int, channel_name: str) -> None:
+        """Register 'channel_name' for 'twitch_id'."""
         self._put_data(
             self.tw_channels_table,
             [self.sub_colname, self.channel_colname],
@@ -86,12 +104,14 @@ class Database:
 
     # Delete functions
     def delete_user_sub(self, chat_id: int, twitch_id: int) -> None:
+        """Remove ('chat_id', 'twitch_id') pair from subscriptions."""
         self._delete_on_cond(
             self.subs_table,
             f"{self.user_colname}={chat_id} AND {self.sub_colname}={twitch_id}"
         )
 
     def delete_channel_name(self, twitch_id: int) -> None:
+        """Remove channel name for 'twitch_id'."""
         self._delete_on_cond(
             self.tw_channels_table,
             f"{self.sub_colname}={twitch_id}"

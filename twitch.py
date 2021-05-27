@@ -1,11 +1,15 @@
+"""TODO: module-docstring."""
+
 import json
 import os
 import requests
 
 
 class TwitchApi:
+    """Main Twitch API class."""
 
     def __init__(self, bot = None):
+        """Initialize TwitchAPI instance, update token."""
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None)
         self.info = []
@@ -40,12 +44,13 @@ class TwitchApi:
         }
 
     def sub_by_channel_name(self, channel):
+        """Subscribe to channel (stream.online) by channel name."""
         twitch_id, display_name = self.get_twitch_user_by_name(channel)
         self.sub2(twitch_id)
         return twitch_id, display_name
 
     def get_twitch_user_by_name(self, channel_name):
-        """get_twitch_user_by_name"""
+        """Get broadcaster_id and display_name by channel name."""
         req = '/helix/users?login='+channel_name
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
@@ -55,6 +60,7 @@ class TwitchApi:
         return int(ans['data'][0]['id']), ans['data'][0]['display_name']
 
     def sub(self, twitch_id):
+        """Subscribe to channel (channel.follow) by broadcaster_id."""
         self.body['type'] = "channel.follow"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
         json_body = json.dumps(self.body)
@@ -63,6 +69,7 @@ class TwitchApi:
         self.answ.append(ans)
 
     def sub2(self, twitch_id):
+        """Subscribe to channel (stream.online) by broadcaster_id."""
         self.body['type'] = "stream.online"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
         json_body = json.dumps(self.body)
@@ -72,6 +79,7 @@ class TwitchApi:
 
 
     def unsubscribe_all(self):
+        """Test, will be removed."""
         ans = requests.get("https://api.twitch.tv/helix/eventsub/subscriptions", headers = self.headers)
         ans = ans.json()
         for i in ans['data']:
