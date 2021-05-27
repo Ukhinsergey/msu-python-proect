@@ -102,7 +102,7 @@ class TwitchApi:
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
 
     def check_online(self, channel_name):
-        req = 'http://api.twitch.tv/helix/search/channels?query='+channel_name
+        req = 'https://api.twitch.tv/helix/streams?client_id='+channel_name
         ans = requests.get(req, headers =self.headers)
         ans = ans.json()
         return ans
