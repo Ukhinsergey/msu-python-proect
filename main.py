@@ -80,9 +80,9 @@ def show_info():
 
 @app.route('/check_id')
 def check_id():
-    tid, name = get_twitch_user_by_name('SilverName')
+    tid, name = twitch_api.get_twitch_user_by_name('SilverName')
     return str(tid) + ' ' + str(name)
-    
+
 @app.route('/unsubscribe_all')
 def unsubscribe_all():
     """Test, will be deleted."""
