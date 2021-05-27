@@ -8,34 +8,32 @@ import requests
 class TwitchApi:
     """Main Twitch API class."""
 
-    def __init__(self, bot = None):
+    def __init__(self):
         """Initialize TwitchAPI instance, update token."""
-
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None)
-        self.info = []
-        self.answ = []
-        self.channel_names = []
-        self.bot = bot
+        self.bot = None
+
         token_params = {
             'client_id': self.client_id ,
             'client_secret': self.client_secret,
             'grant_type': 'client_credentials',
         }
+
         app_token_request = requests.post('https://id.twitch.tv/oauth2/token', params=token_params)
-        self.twitch_app_token_json = app_token_request.json()
+        twitch_app_token_json = app_token_request.json()
 
         self.headers = {
             'Client-ID': self.client_id,
             'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + self.twitch_app_token_json['access_token']
+            'Authorization': 'Bearer ' + twitch_app_token_json['access_token']
         }
 
         self.body = {
             "type": "channel.follow",
             "version": "1",
             "condition": {
-                "broadcaster_user_id": "42674575"
+                "broadcaster_user_id": "-1"
             },
             "transport": {
                 "method": "webhook",
@@ -43,6 +41,10 @@ class TwitchApi:
                 "secret": self.client_secret
             }
         }
+
+    def register_bot(self, bot):
+        """Register bot instance."""
+        self.bot = bot
 
     def sub_by_channel_name(self, channel):
         """Subscribe to channel (stream.online) by channel name."""
@@ -55,7 +57,6 @@ class TwitchApi:
         req = '/helix/users?login='+channel_name
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
-        self.channel_names.append(ans)
         if len(ans['data']) == 0:
             raise RuntimeError("no such user")
         return int(ans['data'][0]['id']), ans['data'][0]['display_name']
@@ -64,29 +65,27 @@ class TwitchApi:
         """Subscribe to channel (channel.follow) by broadcaster_id."""
         self.body['type'] = "channel.follow"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
+
         json_body = json.dumps(self.body)
-        ans = requests.post(
+        _ = requests.post(
             'https://api.twitch.tv/helix/eventsub/subscriptions',
             data=json_body, headers=self.headers
         )
-        ans = ans.json()
-        self.answ.append(ans)
 
     def sub2(self, twitch_id):
         """Subscribe to channel (stream.online) by broadcaster_id."""
         self.body['type'] = "stream.online"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
+
         json_body = json.dumps(self.body)
-        ans = requests.post(
+        _ = requests.post(
             'https://api.twitch.tv/helix/eventsub/subscriptions',
             data=json_body, headers=self.headers
         )
-        ans = ans.json()
-        self.answ.append(ans)
 
 
     def unsubscribe_all(self):
-        """Test, will be removed."""
+        """Unsubscribe from all events (admins-only)."""
         ans = requests.get(
             "https://api.twitch.tv/helix/eventsub/subscriptions",
             headers = self.headers
@@ -102,7 +101,8 @@ class TwitchApi:
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
 
     def check_online(self, channel_name):
-        twitch_id, name = self.get_twitch_user_by_name(channel_name)
+        """Check if channel 'channel_name' is online."""
+        twitch_id, _ = self.get_twitch_user_by_name(channel_name)
         req = 'https://api.twitch.tv/helix/streams?user_id='+str(twitch_id)
         ans = requests.get(req, headers =self.headers)
         ans = ans.json()

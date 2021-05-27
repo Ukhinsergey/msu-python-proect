@@ -32,7 +32,6 @@ def echo(update: Update, _: CallbackContext) -> None:
 def help_fun(update: Update, _: CallbackContext) -> None:
     """Send help-message."""
     update.message.reply_text(
-        "/start - Начало работы\n"
         "/help - Вывод списка доступных команд\n"
         "/sub [Channel1, Channel2, ...] - Подписаться на каналы\n"
         "/unsub [Channel1, Channel2, ...] - Отписаться от каналов\n"
@@ -202,9 +201,9 @@ class TwitchBot(Updater):
             if len(data) > 0:
                 data = data[0]
                 starting_time = strftime(
-                    "%H:%M", 
+                    "%H:%M",
                     strptime(
-                        data['started_at'], 
+                        data['started_at'],
                         "%Y-%m-%dT%H:%M:%SZ"
                     )
                 )
