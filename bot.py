@@ -1,8 +1,7 @@
 """Bot implementation using python-telegram-bot library."""
-
+# pylint: disable=broad-except
 import logging
 import os
-import random
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
@@ -55,6 +54,7 @@ class TwitchBot(Updater):
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
         self.database = Database()
+        self.twitch_api = None # Will be initialized by specific method
         self._add_handlers()
 
         self.start_polling()
@@ -72,7 +72,9 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CommandHandler("unsub", self.unsubscribe))
         self.dispatcher.add_handler(CallbackQueryHandler(self.unsubscribe, pattern="^UNSUB_QUERY"))
 
-        self.dispatcher.add_handler(CallbackQueryHandler(self.channel_info, pattern="^CHANNEL_INFO_QUERY"))
+        self.dispatcher.add_handler(
+            CallbackQueryHandler(self.channel_info, pattern="^CHANNEL_INFO_QUERY")
+        )
 
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
@@ -138,7 +140,9 @@ class TwitchBot(Updater):
                     reply_func(f"Возникла ошибка при отписке от {channel}.\nПричина: {exception}")
         else:
             if len(user_subs) > 0:
-                channel_names = [self.database.get_channel_name(twitch_id)[0] for twitch_id in user_subs]
+                channel_names = [
+                    self.database.get_channel_name(twitch_id)[0] for twitch_id in user_subs
+                ]
                 keyboard = [
                     InlineKeyboardButton(
                         str(channel), callback_data=f"UNSUB_QUERY {channel}"
@@ -190,8 +194,7 @@ class TwitchBot(Updater):
     def channel_info(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling extracting info about channel."""
         channel = update.callback_query.data.split()[1]
-        chat_id = update.callback_query.message.chat_id
-        
+
         try:
             update.callback_query.edit_message_text(
                 text=f"Информация о {channel}"
@@ -200,5 +203,3 @@ class TwitchBot(Updater):
             update.callback_query.edit_message_text(
                 text=f"Возникла ошибка при извлечении информации о канале.\nПричина: {exception}"
             )
-
-

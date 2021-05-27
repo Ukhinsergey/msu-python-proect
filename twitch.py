@@ -1,5 +1,5 @@
 """TODO: module-docstring."""
-
+# pylint: disable=too-many-instance-attributes
 import json
 import os
 import requests
@@ -10,6 +10,7 @@ class TwitchApi:
 
     def __init__(self, bot = None):
         """Initialize TwitchAPI instance, update token."""
+
         self.client_id = os.environ.get("CLIENT_ID", None)
         self.client_secret = os.environ.get("CLIENT_SECRET", None)
         self.info = []
@@ -64,7 +65,10 @@ class TwitchApi:
         self.body['type'] = "channel.follow"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
         json_body = json.dumps(self.body)
-        ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions', data=json_body, headers=self.headers)
+        ans = requests.post(
+            'https://api.twitch.tv/helix/eventsub/subscriptions',
+            data=json_body, headers=self.headers
+        )
         ans = ans.json()
         self.answ.append(ans)
 
@@ -73,17 +77,26 @@ class TwitchApi:
         self.body['type'] = "stream.online"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
         json_body = json.dumps(self.body)
-        ans = requests.post('https://api.twitch.tv/helix/eventsub/subscriptions', data=json_body, headers=self.headers)
+        ans = requests.post(
+            'https://api.twitch.tv/helix/eventsub/subscriptions',
+            data=json_body, headers=self.headers
+        )
         ans = ans.json()
         self.answ.append(ans)
 
 
     def unsubscribe_all(self):
         """Test, will be removed."""
-        ans = requests.get("https://api.twitch.tv/helix/eventsub/subscriptions", headers = self.headers)
+        ans = requests.get(
+            "https://api.twitch.tv/helix/eventsub/subscriptions",
+            headers = self.headers
+        )
         ans = ans.json()
         for i in ans['data']:
             adr = i['id']
-            answ2 = requests.delete("https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr, headers = self.headers)
+            answ2 = requests.delete(
+                "https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr,
+                headers = self.headers
+            )
             self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
