@@ -82,6 +82,13 @@ class TwitchApi:
             data=json_body, headers=self.headers
         )
 
+    def unsubscribe_event(self, channel_name):
+        ans = requests.get(
+            "https://api.twitch.tv/helix/eventsub/subscriptions",
+            headers = self.headers
+        )
+        ans = ans.json()
+        self.bot.bot.send_message(chat_id=456145017, text=str(ans))
 
     def unsubscribe_all(self):
         """Unsubscribe from all events (admins-only)."""

@@ -52,6 +52,11 @@ def twitch_post():
         pass
     return "ok", 200
 
+@app.route('/unsubscribe')
+def unsubscribe():
+    twitch_api.unsubscribe_event('dean1t')
+    return "ok"
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 443))
     app.run(
