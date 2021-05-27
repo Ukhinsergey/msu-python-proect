@@ -54,7 +54,8 @@ def twitch_post():
 
 @app.route('/unsubscribe')
 def unsubscribe():
-    twitch_api.unsubscribe_event(twitch_api.get_twitch_user_by_name("silvername"))
+    twitch_id , name = twitch_api.get_twitch_user_by_name("silvername")
+    twitch_api.unsubscribe_event(twitch_id)
     return "ok"
 
 if __name__ == '__main__':
