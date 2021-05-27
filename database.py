@@ -6,6 +6,7 @@ from typing import List, Tuple
 
 from sqlalchemy import create_engine, text
 
+
 class Database:
     """TODO: class-docstring."""
 
@@ -92,7 +93,7 @@ class Database:
         self._put_data(
             self.subs_table,
             [self.user_colname, self.sub_colname],
-            [(chat_id,twitch_id) for twitch_id in twitch_ids]
+            [(chat_id, twitch_id) for twitch_id in twitch_ids]
         )
 
     def put_channel_name(self, twitch_id: int, channel_name: str) -> None:
@@ -100,7 +101,7 @@ class Database:
         self._put_data(
             self.tw_channels_table,
             [self.sub_colname, self.channel_colname],
-            [(twitch_id,channel_name)]
+            [(twitch_id, channel_name)]
         )
 
     # Delete functions

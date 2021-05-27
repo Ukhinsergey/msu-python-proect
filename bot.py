@@ -29,6 +29,7 @@ def echo(update: Update, _: CallbackContext) -> None:
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
+
 def help_fun(update: Update, _: CallbackContext) -> None:
     """Send help-message."""
     update.message.reply_text(
@@ -40,12 +41,14 @@ def help_fun(update: Update, _: CallbackContext) -> None:
         "По всем вопросам писать @deanit и @seregaukhin"
     )
 
+
 def start(update: Update, _: CallbackContext) -> None:
     """Send welcome to a user along with help-message."""
     chat_id = update.message.chat_id
     username = update.message.chat.username
     update.message.reply_text(text=f"Привет, {username}! chat_id = {chat_id}")
     help_fun(update, None)
+
 
 class TwitchBot(Updater):
     """Main bot class."""
@@ -55,7 +58,7 @@ class TwitchBot(Updater):
         bot_token = os.environ.get("BOT_TOKEN", None)
         super().__init__(bot_token)
         self.database = Database()
-        self.twitch_api = None # Will be initialized by specific method
+        self.twitch_api = None  # Will be initialized by specific method
         self._add_handlers()
 
         self.start_polling()
@@ -82,7 +85,6 @@ class TwitchBot(Updater):
     def register_twitch_api(self, twitch_api: TwitchApi) -> None:
         """Register twitch api."""
         self.twitch_api = twitch_api
-
 
     def subscribe(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling subscriptions."""
@@ -161,7 +163,6 @@ class TwitchBot(Updater):
                     "Чтобы подписаться, воспользуйтесь командой\n"
                     "/sub <Название канала>"
                 )
-
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling displaying of subscriptions."""
