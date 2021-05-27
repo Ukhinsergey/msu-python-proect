@@ -79,12 +79,12 @@ def show_info():
 
 
 @app.route('/check_id_silver')
-def check_id():
+def check_id_silver():
     return str(twitch_api.check_online("SilverName"))
 
 
 @app.route('/check_id_dean1t')
-def check_id():
+def check_id_dean1t():
     return str(twitch_api.check_online("dean1t"))
 
 @app.route('/unsubscribe_all')
