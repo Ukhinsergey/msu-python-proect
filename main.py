@@ -80,14 +80,12 @@ def show_info():
 
 @app.route('/check_id_silver')
 def check_id():
-    tid, name = twitch_api.get_twitch_user_by_name('SilverName')
-    return str(tid) + ' ' + str(name)
+    return str(twitch_api.check_online("SilverName"))
 
 
 @app.route('/check_id_dean1t')
 def check_id():
-    tid, name = twitch_api.get_twitch_user_by_name('dean1t')
-    return str(tid) + ' ' + str(name)
+    return str(twitch_api.check_online("dean1t"))
 
 @app.route('/unsubscribe_all')
 def unsubscribe_all():
