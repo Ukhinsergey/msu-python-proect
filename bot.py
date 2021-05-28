@@ -135,6 +135,7 @@ class TwitchBot(Updater):
                         channel_subs = self.database.get_users_for_sub(twitch_id)
                         if len(channel_subs) == 0:
                             self.database.delete_channel_name(twitch_id)
+                            self.twitch_api.unsubscribe_event(twitch_id)
                             # self.twitch_api.unsubscribe(twitch_id)
                         reply_func(f"Успешная отписка от {display_name}!")
                     else:
