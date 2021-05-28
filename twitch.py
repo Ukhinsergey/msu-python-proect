@@ -112,6 +112,15 @@ class TwitchApi:
             self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
 
+    def list_all_subscriptions(self):
+        """List all subscribed events (admins-only)."""
+        ans = requests.get(
+            "https://api.twitch.tv/helix/eventsub/subscriptions",
+            headers = self.headers
+        )
+        ans = ans.json()
+        return ans['data']
+
     def check_online(self, channel_name):
         """Check if channel 'channel_name' is online."""
         twitch_id, _ = self.get_twitch_user_by_name(channel_name)

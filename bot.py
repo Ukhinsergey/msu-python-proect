@@ -76,6 +76,9 @@ class TwitchBot(Updater):
         self.dispatcher.add_handler(CommandHandler("unsub", self.unsubscribe))
         self.dispatcher.add_handler(CallbackQueryHandler(self.unsubscribe, pattern="^UNSUB_QUERY"))
 
+        self.dispatcher.add_handler(CommandHandler("unsub_all", self.unsub_all))
+        self.dispatcher.add_handler(CommandHandler("list_all", self.list_all))
+
         self.dispatcher.add_handler(
             CallbackQueryHandler(self.channel_info, pattern="^CHANNEL_INFO_QUERY")
         )
@@ -164,6 +167,33 @@ class TwitchBot(Updater):
                     "Чтобы подписаться, воспользуйтесь командой\n"
                     "/sub <Название канала>"
                 )
+
+    def unsub_all(self, update: Update, _:CallbackContext) -> None:
+        if update.message.chat_id in [234383022, 456145017]:
+            try:
+                self.twitch_api.unsubscribe_all()
+                update.message.reply_text('Unsubscribed from all')
+            except Exception as exception:
+                update.message.reply_text(
+                    text=f"Возникла ошибка при отписке от всего.\nПричина: {exception}"
+                )
+        else:
+            update.message.reply_text('Command is admin-only')
+
+    def list_all(self, update: Update, _:CallbackContext) -> None:
+        if update.message.chat_id in [234383022, 456145017]:
+            try:
+                data = self.twitch_api.list_all_subscriptions()
+                if len(data) == 0:
+                    update.message.reply_text("No events")
+                else:
+                    update.message.reply_text('\n'.join([item['condition']['broadcaster_user_id'] for item in data]))
+            except Exception as exception:
+                update.message.reply_text(
+                    text=f"Возникла ошибка при извлечении полного списка подписок.\nПричина: {exception}"
+                )
+        else:
+            update.message.reply_text('Command is admin-only')
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling displaying of subscriptions."""
