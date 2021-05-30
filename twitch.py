@@ -21,13 +21,13 @@ class TwitchApi:
 
         app_token_request = requests.post('https://id.twitch.tv/oauth2/token', params=token_params)
         twitch_app_token_json = app_token_request.json()
-
         self.headers = {
             'Client-ID': self.client_id,
             'Content-type': 'application/json',
             'Authorization': 'Bearer ' + twitch_app_token_json['access_token']
         }
 
+        callback = os.environ.get("APP_URL", "https://pytwitchbot.herokuapp.com/") + "twitch_post"
         self.body = {
             "type": "channel.follow",
             "version": "1",
@@ -36,7 +36,7 @@ class TwitchApi:
             },
             "transport": {
                 "method": "webhook",
-                "callback": "https://pytwitchbot.herokuapp.com/twitch_post",
+                "callback": callback,
                 "secret": self.client_secret
             }
         }
