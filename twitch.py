@@ -5,8 +5,6 @@ from typing import Tuple, Dict
 
 import requests
 
-from bot import TwitchBot
-
 
 class TwitchApi:
     """Main Twitch API class."""
@@ -45,7 +43,7 @@ class TwitchApi:
             }
         }
 
-    def register_bot(self, bot: TwitchBot) -> None:
+    def register_bot(self, bot) -> None:
         """Register bot instance."""
         self.bot = bot
 

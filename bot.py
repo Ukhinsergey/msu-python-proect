@@ -16,7 +16,6 @@ from telegram.ext import (
 )
 
 from database import Database
-from twitch import TwitchApi
 
 # Enable logging
 logging.basicConfig(
@@ -87,7 +86,7 @@ class TwitchBot(Updater):
 
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
 
-    def register_twitch_api(self, twitch_api: TwitchApi) -> None:
+    def register_twitch_api(self, twitch_api) -> None:
         """Register twitch api."""
         self.twitch_api = twitch_api
 
