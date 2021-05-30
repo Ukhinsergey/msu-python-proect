@@ -34,10 +34,15 @@ def send_notification(twitch_id: int, display_name: str) -> None:
         bot.database.put_channel_name(twitch_id, display_name)
 
     message = (
-        f"{display_name} начал трансляцию {data['game_name']}!\n"
-        f"{data['title']}\n"
+        "{display_name} начал трансляцию {game_name}!\n"
+        "{title}\n"
         "\n"
-        f"https://twitch.tv/{display_name}\n"
+        "https://twitch.tv/{display_name}\n"
+        .format(
+            display_name=display_name,
+            game_name=data['game_name'],
+            title=data['title']
+        )
     )
 
     for user_id in subscribed_users:
@@ -52,18 +57,18 @@ def twitch_post():
     """Process main twitch requests."""
     data = json.loads(request.data)
 
-    if "challenge" in data.keys():
-        return data["challenge"], 200
+    if 'challenge' in data.keys():
+        return data['challenge'], 200
 
-    if data['subscription']['type'] == "stream.online":  # "channel.follow"
+    if data['subscription']['type'] == 'stream.online':  # 'channel.follow'
         twitch_id = int(data['event']['broadcaster_user_id'])
         display_name = data['event']['broadcaster_user_name']
         send_notification(twitch_id, display_name)
-    return "ok", 200
+    return 'ok', 200
 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 443))
+    port = int(os.environ.get('PORT', 443))
     app.run(
         threaded=True,
         port=port

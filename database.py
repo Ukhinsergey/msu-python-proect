@@ -31,9 +31,9 @@ class Database:
         # Create tables if not exists
         with self.engine.connect() as conn:
             if self.subs_table not in self.engine.dialect.get_table_names(conn):
-                conn.execute(text(f"CREATE TABLE {self.subs_table} ({self.user_colname} int, {self.sub_colname} int)"))
+                conn.execute(text(f'CREATE TABLE {self.subs_table} ({self.user_colname} int, {self.sub_colname} int)'))
             if self.tw_channels_table not in self.engine.dialect.get_table_names(conn):
-                conn.execute(text(f"CREATE TABLE {self.tw_channels_table} ({self.sub_colname} int, {self.channel_colname} varchar)"))
+                conn.execute(text(f'CREATE TABLE {self.tw_channels_table} ({self.sub_colname} int, {self.channel_colname} varchar)'))
             conn.commit()
 
     # Internal functions
@@ -68,7 +68,7 @@ class Database:
         'DELETE FROM {table_name} WHERE {condition}'
         """
         with self.engine.connect() as conn:
-            conn.execute(text(f"DELETE FROM {table_name} WHERE {condition}"))
+            conn.execute(text(f'DELETE FROM {table_name} WHERE {condition}'))
             conn.commit()
 
     # Get functions
@@ -109,12 +109,12 @@ class Database:
         """Remove ('chat_id', 'twitch_id') pair from subscriptions."""
         self._delete_on_cond(
             self.subs_table,
-            f"{self.user_colname}={chat_id} AND {self.sub_colname}={twitch_id}"
+            f'{self.user_colname}={chat_id} AND {self.sub_colname}={twitch_id}'
         )
 
     def delete_channel_name(self, twitch_id: int) -> None:
         """Remove channel name for 'twitch_id'."""
         self._delete_on_cond(
             self.tw_channels_table,
-            f"{self.sub_colname}={twitch_id}"
+            f'{self.sub_colname}={twitch_id}'
         )
