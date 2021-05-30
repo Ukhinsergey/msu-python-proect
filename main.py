@@ -34,7 +34,7 @@ def send_notification(twitch_id: int, display_name: str) -> None:
         bot.database.put_channel_name(twitch_id, display_name)
 
     message = (
-        f"{display_name} начал трансляцию!\n"
+        f"{display_name} начал трансляцию {data['game_name']}!\n"
         f"{data['title']}\n"
         "\n"
         f"https://twitch.tv/{display_name}\n"

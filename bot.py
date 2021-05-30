@@ -99,6 +99,10 @@ class TwitchBot(Updater):
             for channel in channels_to_subscribe:
                 try:
                     twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
+                    if twitch_id == -1:
+                        update.message.reply_text(
+                            text=f"Канал {channel} не найден."
+                        )
                     if twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         if len(self.database.get_channel_name(twitch_id)) == 0:

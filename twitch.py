@@ -48,7 +48,7 @@ class TwitchApi:
     def sub_by_channel_name(self, channel):
         """Subscribe to channel (stream.online) by channel name."""
         twitch_id, display_name = self.get_twitch_user_by_name(channel)
-        self.sub2(twitch_id)
+        self.sub(twitch_id)
         return twitch_id, display_name
 
     def get_twitch_user_by_name(self, channel_name):
@@ -57,23 +57,12 @@ class TwitchApi:
         ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
         ans = ans.json()
         if len(ans['data']) == 0:
-            raise RuntimeError("no such user")
+            return -1, ""
         return int(ans['data'][0]['id']), ans['data'][0]['display_name']
 
     def sub(self, twitch_id):
-        """Subscribe to channel (channel.follow) by broadcaster_id."""
-        self.body['type'] = "channel.follow"
-        self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
-
-        json_body = json.dumps(self.body)
-        _ = requests.post(
-            'https://api.twitch.tv/helix/eventsub/subscriptions',
-            data=json_body, headers=self.headers
-        )
-
-    def sub2(self, twitch_id):
         """Subscribe to channel (stream.online) by broadcaster_id."""
-        self.body['type'] = "stream.online"
+        self.body['type'] = "stream.online"  # "channel.follow"
         self.body["condition"]["broadcaster_user_id"] = str(twitch_id)
 
         json_body = json.dumps(self.body)
