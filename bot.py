@@ -172,29 +172,33 @@ class TwitchBot(Updater):
                     "/sub <Название канала>"
                 )
 
-    def unsub_all(self, update: Update, _:CallbackContext) -> None:
+    def unsub_all(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling unsubscriptions from all events (admins-only)."""
         if update.message.chat_id in [234383022, 456145017]:
             try:
                 self.twitch_api.unsubscribe_all()
                 update.message.reply_text('Unsubscribed from all')
             except Exception as exception:
                 update.message.reply_text(
-                    text=f"Возникла ошибка при отписке от всего.\nПричина: {exception}"
+                    text=f"Возникла ошибка при отписке от всех событий.\nПричина: {exception}"
                 )
         else:
             update.message.reply_text('Command is admin-only')
 
-    def list_all(self, update: Update, _:CallbackContext) -> None:
+    def list_all(self, update: Update, _: CallbackContext) -> None:
+        """Bot function handling listing all subscribed events (admins-only)."""
         if update.message.chat_id in [234383022, 456145017]:
             try:
                 data = self.twitch_api.list_all_subscriptions()
                 if len(data) == 0:
                     update.message.reply_text("No events")
                 else:
-                    update.message.reply_text('\n'.join([item['condition']['broadcaster_user_id'] for item in data]))
+                    update.message.reply_text(
+                        '\n'.join([item['condition']['broadcaster_user_id'] for item in data])
+                    )
             except Exception as exception:
                 update.message.reply_text(
-                    text=f"Возникла ошибка при извлечении полного списка подписок.\nПричина: {exception}"
+                    f"Возникла ошибка при извлечении полного списка событий.\nПричина: {exception}"
                 )
         else:
             update.message.reply_text('Command is admin-only')

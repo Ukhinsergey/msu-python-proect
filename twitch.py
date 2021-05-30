@@ -14,7 +14,7 @@ class TwitchApi:
         self.bot = None
 
         token_params = {
-            'client_id': self.client_id ,
+            'client_id': self.client_id,
             'client_secret': self.client_secret,
             'grant_type': 'client_credentials',
         }
@@ -53,8 +53,8 @@ class TwitchApi:
 
     def get_twitch_user_by_name(self, channel_name):
         """Get broadcaster_id and display_name by channel name."""
-        req = '/helix/users?login='+channel_name
-        ans  = requests.get("http://api.twitch.tv" + req, headers = self.headers)
+        req = '/helix/users?login=' + channel_name
+        ans = requests.get("http://api.twitch.tv" + req, headers=self.headers)
         ans = ans.json()
         if len(ans['data']) == 0:
             return -1, ""
@@ -72,31 +72,32 @@ class TwitchApi:
         )
 
     def unsubscribe_event(self, broadcaster_user_id):
+        """Unsubscribe from events for selected channel."""
         ans = requests.get(
             "https://api.twitch.tv/helix/eventsub/subscriptions",
-            headers = self.headers
+            headers=self.headers
         )
         ans = ans.json()
         for i in ans['data']:
             if str(i['condition']['broadcaster_user_id']) == str(broadcaster_user_id):
                 adr = i['id']
-                answ2 = requests.delete(
+                requests.delete(
                     "https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr,
-                    headers = self.headers
+                    headers=self.headers
                 )
 
     def unsubscribe_all(self):
         """Unsubscribe from all events (admins-only)."""
         ans = requests.get(
             "https://api.twitch.tv/helix/eventsub/subscriptions",
-            headers = self.headers
+            headers=self.headers
         )
         ans = ans.json()
         for i in ans['data']:
             adr = i['id']
             answ2 = requests.delete(
                 "https://api.twitch.tv/helix/eventsub/subscriptions?id=" + adr,
-                headers = self.headers
+                headers=self.headers
             )
             self.bot.bot.send_message(chat_id=456145017, text=str(answ2))
             self.bot.bot.send_message(chat_id=234383022, text=str(answ2))
@@ -105,7 +106,7 @@ class TwitchApi:
         """List all subscribed events (admins-only)."""
         ans = requests.get(
             "https://api.twitch.tv/helix/eventsub/subscriptions",
-            headers = self.headers
+            headers=self.headers
         )
         ans = ans.json()
         return ans['data']
@@ -113,7 +114,7 @@ class TwitchApi:
     def check_online(self, channel_name):
         """Check if channel 'channel_name' is online."""
         twitch_id, _ = self.get_twitch_user_by_name(channel_name)
-        req = 'https://api.twitch.tv/helix/streams?user_id='+str(twitch_id)
-        ans = requests.get(req, headers =self.headers)
+        req = 'https://api.twitch.tv/helix/streams?user_id=' + str(twitch_id)
+        ans = requests.get(req, headers=self.headers)
         ans = ans.json()
         return ans
