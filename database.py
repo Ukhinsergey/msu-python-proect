@@ -10,7 +10,7 @@ from sqlalchemy import create_engine, text
 class Database:
     """Main database class."""
 
-    def __init__(self, subs_table='user_subs', tw_channels_table='twitch_channels'):
+    def __init__(self, subs_table='user_subs', tw_channels_table='twitch_channels', echo=True):
         """Create simple wrapper around database with one table.
 
         subs_table        : str - name of table (ChatID int, TwitchID int)
@@ -25,7 +25,7 @@ class Database:
 
         self.engine = create_engine(
             os.environ.get('DATABASE_URL', 'sqlite:///test.db').replace('postgres', 'postgresql'),
-            echo=True, future=True
+            echo=echo, future=True
         )
 
         # Create tables if not exists
