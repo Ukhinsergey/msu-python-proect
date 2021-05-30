@@ -2,10 +2,11 @@ import unittest
 from database import Database
 import os
 
+
 class TestDatabase(unittest.TestCase):
 
     def setUp(self):
-        self.database = Database(echo = False)
+        self.database = Database(echo=False)
 
     def test_get_data_empty_subsdb(self):
         result = self.database._get_data(self.database.subs_table, self.database.user_colname, 1)
@@ -92,8 +93,8 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(result, [])
 
     def test_1_rest_functions(self):
-        self.database.put_subs_for_user(1, [1,2,3,4,5,6,7,8,9,10])
-        self.database.put_subs_for_user(2, [13,22,31,44,5,6,7,8,9,10])
+        self.database.put_subs_for_user(1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+        self.database.put_subs_for_user(2, [13, 22, 31, 44, 5, 6, 7, 8, 9, 10])
         self.database.put_channel_name(1, '1')
         self.database.put_channel_name(2, '2')
         self.database.put_channel_name(3, '3')
@@ -109,9 +110,9 @@ class TestDatabase(unittest.TestCase):
         self.database.put_channel_name(7, '7')
         self.database.put_channel_name(6, '6')
         result = self.database.get_subs_for_user(1)
-        self.assertEqual(result, [1,2,3,4,5,6,7,8,9,10])
+        self.assertEqual(result, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         result = self.database.get_subs_for_user(2)
-        self.assertEqual(result, [13,22,31,44,5,6,7,8,9,10])
+        self.assertEqual(result, [13, 22, 31, 44, 5, 6, 7, 8, 9, 10])
         result = self.database.get_users_for_sub(22)
         self.assertEqual(result, [2])
         result = self.database.get_users_for_sub(7)
@@ -120,18 +121,15 @@ class TestDatabase(unittest.TestCase):
         self.assertEqual(result, ['31testchannel'])
         self.database.delete_user_sub(1, 3)
         result = self.database.get_subs_for_user(1)
-        self.assertEqual(result, [1,2,4,5,6,7,8,9,10])
+        self.assertEqual(result, [1, 2, 4, 5, 6, 7, 8, 9, 10])
         self.database.delete_channel_name(44)
         result = self.database.get_channel_name(44)
         self.assertEqual(result, [])
         result = self.database.get_subs_for_user(2)
-        self.assertEqual(result, [13,22,31,44,5,6,7,8,9,10])
-
-
+        self.assertEqual(result, [13, 22, 31, 44, 5, 6, 7, 8, 9, 10])
 
     def tearDown(self):
         os.remove('test.db')
-
 
 
 if __name__ == '__main__':

@@ -139,7 +139,7 @@ class TwitchBot(Updater):
             for channel in channels_to_unsubscribe:
                 try:
                     twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
-                    if twitch_id in user_subs:
+                    if twitch_id != -1 and twitch_id in user_subs:
                         self.database.delete_user_sub(chat_id, twitch_id)
                         channel_subs = self.database.get_users_for_sub(twitch_id)
                         if len(channel_subs) == 0:
