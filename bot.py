@@ -103,7 +103,7 @@ class TwitchBot(Updater):
                         update.message.reply_text(
                             text=f"Канал {channel} не найден."
                         )
-                    if twitch_id not in user_subs:
+                    elif twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         if len(self.database.get_channel_name(twitch_id)) == 0:
                             self.twitch_api.sub(twitch_id)
