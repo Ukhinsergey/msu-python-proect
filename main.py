@@ -1,4 +1,4 @@
-"""TODO: Module docstring."""
+"""Main file with Flask application and routes."""
 import os
 import json
 

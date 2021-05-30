@@ -1,4 +1,4 @@
-"""TODO: module-docstring."""
+"""Twitch API wrapper for subscription and unsubscription from twitch events."""
 import json
 import os
 import requests

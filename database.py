@@ -1,4 +1,4 @@
-"""TODO: module-docstring."""
+"""Database wrapper for storing subscriptions and channel names."""
 # pylint: disable=line-too-long
 
 import os
@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, text
 
 
 class Database:
-    """TODO: class-docstring."""
+    """Main database class."""
 
     def __init__(self, subs_table='user_subs', tw_channels_table='twitch_channels'):
         """Create simple wrapper around database with one table.
