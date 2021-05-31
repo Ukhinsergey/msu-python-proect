@@ -3,7 +3,7 @@
 import logging
 import os
 from time import strftime, strptime
-# import gettext
+import gettext
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
@@ -25,6 +25,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # gettext.install('pytwitchbot')
+def _(a):
+    return a
 
 
 def echo(update: Update, _: CallbackContext) -> None:
@@ -35,19 +37,21 @@ def echo(update: Update, _: CallbackContext) -> None:
 def help_fun(update: Update, _: CallbackContext) -> None:
     """Send help-message."""
     update.message.reply_text(
-        "/help - Вывод списка доступных команд\n"
-        "/sub [Channel1, Channel2, ...] - Подписаться на каналы\n"
-        "/unsub [Channel1, Channel2, ...] - Отписаться от каналов\n"
-        "/list - Просмотр списка подписок\n"
-        "\n"
-        "По всем вопросам писать @deanit и @seregaukhin"
+        _(
+            "/help - list available messages\n"
+            "/sub [Channel1, Channel2, ...] - subscribe to channels\n"
+            "/unsub [Channel1, Channel2, ...] - unsubscribe from channels\n"
+            "/list - list subscriptions\n"
+            "\n"
+            "Contact @deanit и @seregaukhin for help"
+        )
     )
 
 
 def start(update: Update, _: CallbackContext) -> None:
     """Send welcome to a user along with help-message."""
     username = update.message.chat.username
-    update.message.reply_text("Привет, {}!".format(username))
+    update.message.reply_text(_("Hello, {}!".format(username)))
     help_fun(update, None)
 
 
@@ -102,24 +106,26 @@ class TwitchBot(Updater):
                     twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id == -1:
                         update.message.reply_text(
-                            "Канал {channel} не найден.".format(channel=channel)
+                            _("Channel {channel} not found.".format(channel=channel))
                         )
                     elif twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         if len(self.database.get_channel_name(twitch_id)) == 0:
                             self.twitch_api.sub(twitch_id)
                             self.database.put_channel_name(twitch_id, display_name)
-                        update.message.reply_text("Успешная подписка на {}!".format(display_name))
+                        update.message.reply_text(_("Successfully subscribed to {}!".format(display_name)))
                     else:
-                        update.message.reply_text("Вы уже подписаны на {}!".format(display_name))
+                        update.message.reply_text(_("You are already subscribed to {}!".format(display_name)))
                 except Exception as exception:
                     update.message.reply_text(
-                        "Возникла ошибка при подписке на {}.\n"
-                        "Причина: {}".format(channel, exception)
+                        _(
+                            "An error occurred while subscribing to {}.\n"
+                            "Reason: {}".format(channel, exception)
+                        )
                     )
         else:
             update.message.reply_text(
-                "Вы должны ввести название канала, на который хотите подписаться"
+                _("You must enter the name of the channel you want to subscribe to")
             )
 
     def unsubscribe(self, update: Update, _: CallbackContext) -> None:
@@ -146,13 +152,15 @@ class TwitchBot(Updater):
                             self.database.delete_channel_name(twitch_id)
                             self.twitch_api.unsubscribe_event(twitch_id)
                             # self.twitch_api.unsubscribe(twitch_id)
-                        reply_func("Успешная отписка от {}!".format(display_name))
+                        reply_func(_("Successfully unsubscribed from {}!".format(display_name)))
                     else:
-                        reply_func("Вы не подписаны на {}!".format(display_name))
+                        reply_func(_("You are not subscribed to {}!".format(channel)))
                 except Exception as exception:
                     reply_func(
-                        "Возникла ошибка при отписке от {}.\n"
-                        "Причина: {}".format(channel, exception)
+                        _(
+                            "An error occurred while unsubscribing from {}.\n"
+                            "Reason: {}".format(channel, exception)
+                        )
                     )
         else:
             if len(user_subs) > 0:
@@ -167,14 +175,16 @@ class TwitchBot(Updater):
                 ]
                 keyboard = InlineKeyboardMarkup.from_column(keyboard)
                 reply_func(
-                    "Выберите канал, от которого хотите отписаться:",
+                    _("Select the channel you want to unsubscribe from:"),
                     reply_markup=keyboard
                 )
             else:
                 reply_func(
-                    "У вас еще нет подписок!\n"
-                    "Чтобы подписаться, воспользуйтесь командой\n"
-                    "/sub <Название канала>"
+                    _(
+                        "You don't have any subscriptions yet!\n"
+                        "To subscribe, use the command\n"
+                        "/sub <Channel name>"
+                    )
                 )
 
     def unsub_all(self, update: Update, _: CallbackContext) -> None:
@@ -182,14 +192,16 @@ class TwitchBot(Updater):
         if update.message.chat_id in [234383022, 456145017]:
             try:
                 self.twitch_api.unsubscribe_all()
-                update.message.reply_text("Вы отписались от всех событий")
+                update.message.reply_text(_("You have unsubscribed from all events"))
             except Exception as exception:
                 update.message.reply_text(
-                    "Возникла ошибка при отписке от всех событий.\n"
-                    "Причина: {}".format(exception)
+                    _(
+                        "An error occurred while unsubscribing from all events.\n"
+                        "Reason: {}".format(exception)
+                    )
                 )
         else:
-            update.message.reply_text("Команда только для администраторов")
+            update.message.reply_text(_("Command is admins-only"))
 
     def list_all(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling listing all subscribed events (admins-only)."""
@@ -197,18 +209,20 @@ class TwitchBot(Updater):
             try:
                 data = self.twitch_api.list_all_subscriptions()
                 if len(data) == 0:
-                    update.message.reply_text("Событий нет")
+                    update.message.reply_text(_("No events"))
                 else:
                     update.message.reply_text(
                         '\n'.join([item['condition']['broadcaster_user_id'] for item in data])
                     )
             except Exception as exception:
                 update.message.reply_text(
-                    "Возникла ошибка при извлечении полного списка событий.\n"
-                    "Причина: {}".format(exception)
+                    _(
+                        "An error occured while retrieving the complete list of events.\n"
+                        "Reason: {}".format(exception)
+                    )
                 )
         else:
-            update.message.reply_text("Команда только для администраторов")
+            update.message.reply_text(_("Command is admins-only"))
 
     def list_subs(self, update: Update, _: CallbackContext) -> None:
         """Bot function handling displaying of subscriptions."""
@@ -224,20 +238,24 @@ class TwitchBot(Updater):
                 ]
                 keyboard = InlineKeyboardMarkup.from_column(keyboard)
                 update.message.reply_text(
-                    "Список ваших подписок:\nНажмите, чтобы узнать информацию о канале",
+                    _("List of your subscriptions:\nClick on channel for information"),
                     reply_markup=keyboard
                 )
             else:
                 update.message.reply_text(
-                    "У вас еще нет подписок!\n"
-                    "Чтобы подписаться, воспользуйтесь командой\n"
-                    "/sub <Название канала>"
+                    _(
+                        "You don't have any subscriptions yet!\n"
+                        "To subscribe, use the command\n"
+                        "/sub <Channel name>"
+                    )
                 )
 
         except Exception as exception:
             update.message.reply_text(
-                "Возникла ошибка при извлечении списка подписок.\n"
-                "Причина: {}".format(exception)
+                _(
+                    "An error occured while fetching the list of subscriptions.\n"
+                    "Reason: {}".format(exception)
+                )
             )
 
     def channel_info(self, update: Update, _: CallbackContext) -> None:
@@ -256,26 +274,32 @@ class TwitchBot(Updater):
                     )
                 )
                 update.callback_query.edit_message_text(
-                    "{channel} стримит {game_name} с {starting_time}!\n"
-                    "{title}\n"
-                    "\n"
-                    "https://twitch.tv/{channel}\n"
-                    .format(
-                        channel=channel,
-                        game_name=data['game_name'],
-                        starting_time=starting_time,
-                        title=data['title']
+                    _(
+                        "{channel} is streaming {game_name} since {starting_time}!\n"
+                        "{title}\n"
+                        "\n"
+                        "https://twitch.tv/{channel}\n"
+                        .format(
+                            channel=channel,
+                            game_name=data['game_name'],
+                            starting_time=starting_time,
+                            title=data['title']
+                        )
                     )
                 )
             else:
                 update.callback_query.edit_message_text(
-                    "{channel} не онлайн."
-                    "\n"
-                    "https://twitch.tv/{channel}\n"
-                    .format(channel=channel)
+                    _(
+                        "{channel} is not online."
+                        "\n"
+                        "https://twitch.tv/{channel}\n"
+                        .format(channel=channel)
+                    )
                 )
         except Exception as exception:
             update.callback_query.edit_message_text(
-                "Возникла ошибка при извлечении информации о канале.\n"
-                "Причина: {}".format(exception)
+                _(
+                    "An error occured while fetching channel information.\n"
+                    "Reason: {}".format(exception)
+                )
             )

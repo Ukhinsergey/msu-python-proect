@@ -1,6 +1,7 @@
 """Main file with Flask application and routes."""
 import os
 import json
+import gettext
 
 from flask import Flask, request
 
@@ -14,6 +15,9 @@ twitch_api = TwitchApi()
 bot.register_twitch_api(twitch_api)
 twitch_api.register_bot(bot)
 
+# gettext.install('pytwitchbot')
+def _(a):
+    return a
 
 @app.route('/')
 def index():
@@ -34,14 +38,16 @@ def send_notification(twitch_id: int, display_name: str) -> None:
         bot.database.put_channel_name(twitch_id, display_name)
 
     message = (
-        "{display_name} начал трансляцию {game_name}!\n"
-        "{title}\n"
-        "\n"
-        "https://twitch.tv/{display_name}\n"
-        .format(
-            display_name=display_name,
-            game_name=data['game_name'],
-            title=data['title']
+        _(
+            "{display_name} is online {game_name}!\n"
+            "{title}\n"
+            "\n"
+            "https://twitch.tv/{display_name}\n"
+            .format(
+                display_name=display_name,
+                game_name=data['game_name'],
+                title=data['title']
+            )
         )
     )
 
