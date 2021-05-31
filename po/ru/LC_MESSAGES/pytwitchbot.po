@@ -1,0 +1,138 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2021 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2021-05-31 03:15+0300\n"
+"PO-Revision-Date: 2021-05-31 03:17+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: bot.py:40
+msgid ""
+"/help — show available commands\n"
+"/sub [Channel1, Channel2, ...] — subscribe to channels\n"
+"/unsub [Channel1, Channel2, ...] — unsubscribe from channels\n"
+"/list — list subscriptions\n"
+"\n"
+"Contact @deanit и @seregaukhin for help"
+msgstr ""
+
+#: bot.py:54
+msgid "Hello, {}!"
+msgstr "Привет, {}!"
+
+#: bot.py:109
+msgid "Channel {channel} not found."
+msgstr ""
+
+#: bot.py:116
+msgid "Successfully subscribed to {}!"
+msgstr ""
+
+#: bot.py:118
+msgid "You are already subscribed to {}!"
+msgstr ""
+
+#: bot.py:123
+msgid ""
+"An error occurred while subscribing to {}.\n"
+"Reason: {}"
+msgstr ""
+
+#: bot.py:128
+msgid "You must enter the name of the channel you want to subscribe to"
+msgstr ""
+
+#: bot.py:155
+msgid "Successfully unsubscribed from {}!"
+msgstr ""
+
+#: bot.py:157
+msgid "You are not subscribed to {}!"
+msgstr ""
+
+#: bot.py:162
+msgid ""
+"An error occurred while unsubscribing from {}.\n"
+"Reason: {}"
+msgstr ""
+
+#: bot.py:178
+msgid "Select the channel you want to unsubscribe from:"
+msgstr ""
+
+#: bot.py:183 bot.py:246
+msgid ""
+"You don't have any subscriptions yet!\n"
+"To subscribe, use the command\n"
+"/sub <Channel name>"
+msgstr ""
+
+#: bot.py:195
+msgid "You have unsubscribed from all events"
+msgstr ""
+
+#: bot.py:200
+msgid ""
+"An error occurred while unsubscribing from all events.\n"
+"Reason: {}"
+msgstr ""
+
+#: bot.py:204 bot.py:225
+msgid "Command is admins-only"
+msgstr ""
+
+#: bot.py:212
+msgid "No events"
+msgstr ""
+
+#: bot.py:221
+msgid ""
+"An error occured while retrieving the complete list of events.\n"
+"Reason: {}"
+msgstr ""
+
+#: bot.py:241
+msgid ""
+"List of your subscriptions:\n"
+"Click on channel for information"
+msgstr ""
+
+#: bot.py:257
+msgid ""
+"An error occured while fetching the list of subscriptions.\n"
+"Reason: {}"
+msgstr ""
+
+#: bot.py:282
+msgid ""
+"{channel} is streaming {game_name} since {starting_time}!\n"
+"{title}\n"
+"\n"
+"https://twitch.tv/{channel}\n"
+msgstr ""
+
+#: bot.py:296
+msgid ""
+"{channel} is not online.\n"
+"https://twitch.tv/{channel}\n"
+msgstr ""
+
+#: bot.py:303
+msgid ""
+"An error occured while fetching channel information.\n"
+"Reason: {}"
+msgstr ""
+
