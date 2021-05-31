@@ -29,12 +29,12 @@ def _(a):
     return a
 
 
-def echo(update: Update, _: CallbackContext) -> None:
+def echo(update: Update, __: CallbackContext) -> None:
     """Echo the user message."""
     update.message.reply_text(update.message.text)
 
 
-def help_fun(update: Update, _: CallbackContext) -> None:
+def help_fun(update: Update, __: CallbackContext) -> None:
     """Send help-message."""
     update.message.reply_text(
         _(
@@ -48,7 +48,7 @@ def help_fun(update: Update, _: CallbackContext) -> None:
     )
 
 
-def start(update: Update, _: CallbackContext) -> None:
+def start(update: Update, __: CallbackContext) -> None:
     """Send welcome to a user along with help-message."""
     username = update.message.chat.username
     update.message.reply_text(_("Hello, {}!".format(username)))
@@ -94,7 +94,7 @@ class TwitchBot(Updater):
         """Register twitch api."""
         self.twitch_api = twitch_api
 
-    def subscribe(self, update: Update, _: CallbackContext) -> None:
+    def subscribe(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling subscriptions."""
         channels_to_subscribe = update.message.text.split()[1:]
 
@@ -128,7 +128,7 @@ class TwitchBot(Updater):
                 _("You must enter the name of the channel you want to subscribe to")
             )
 
-    def unsubscribe(self, update: Update, _: CallbackContext) -> None:
+    def unsubscribe(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling unsubscriptions."""
         if update.message is not None:
             channels_to_unsubscribe = update.message.text.split()[1:]
@@ -187,7 +187,7 @@ class TwitchBot(Updater):
                     )
                 )
 
-    def unsub_all(self, update: Update, _: CallbackContext) -> None:
+    def unsub_all(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling unsubscriptions from all events (admins-only)."""
         if update.message.chat_id in [234383022, 456145017]:
             try:
@@ -203,7 +203,7 @@ class TwitchBot(Updater):
         else:
             update.message.reply_text(_("Command is admins-only"))
 
-    def list_all(self, update: Update, _: CallbackContext) -> None:
+    def list_all(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling listing all subscribed events (admins-only)."""
         if update.message.chat_id in [234383022, 456145017]:
             try:
@@ -224,7 +224,7 @@ class TwitchBot(Updater):
         else:
             update.message.reply_text(_("Command is admins-only"))
 
-    def list_subs(self, update: Update, _: CallbackContext) -> None:
+    def list_subs(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling displaying of subscriptions."""
         try:
             result = self.database.get_subs_for_user(update.message.chat_id)
@@ -258,7 +258,7 @@ class TwitchBot(Updater):
                 )
             )
 
-    def channel_info(self, update: Update, _: CallbackContext) -> None:
+    def channel_info(self, update: Update, __: CallbackContext) -> None:
         """Bot function handling extracting info about channel."""
         channel = update.callback_query.data.split()[1]
         try:
