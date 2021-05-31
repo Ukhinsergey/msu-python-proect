@@ -38,10 +38,10 @@ def help_fun(update: Update, __: CallbackContext) -> None:
     """Send help-message."""
     update.message.reply_text(
         _(
-            "/help - list available messages\n"
-            "/sub [Channel1, Channel2, ...] - subscribe to channels\n"
-            "/unsub [Channel1, Channel2, ...] - unsubscribe from channels\n"
-            "/list - list subscriptions\n"
+            "/help — show available commands\n"
+            "/sub [Channel1, Channel2, ...] — subscribe to channels\n"
+            "/unsub [Channel1, Channel2, ...] — unsubscribe from channels\n"
+            "/list — list subscriptions\n"
             "\n"
             "Contact @deanit и @seregaukhin for help"
         )
