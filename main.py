@@ -2,6 +2,7 @@
 import os
 import json
 import gettext
+import locale
 
 from flask import Flask, request
 
@@ -15,9 +16,18 @@ twitch_api = TwitchApi()
 bot.register_twitch_api(twitch_api)
 twitch_api.register_bot(bot)
 
-# gettext.install('pytwitchbot')
-def _(a):
-    return a
+if os.path.exists('po/ru/LC_MESSAGES/pytwitchbot.mo'):
+    bot.bot.send_message(chat_id=234383022, text="exists")
+else:
+    bot.bot.send_message(chat_id=234383022, text="not exists")
+
+bot.bot.send_message(chat_id=234383022, text=str(locale.getlocale()))
+
+gettext.install('pytwitchbot', localedir='po')  # !
+
+bot.bot.send_message(chat_id=234383022, text=_("NOT WORKS!:("))
+
+
 
 @app.route('/')
 def index():
