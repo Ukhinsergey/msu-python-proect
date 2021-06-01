@@ -49,7 +49,7 @@ def help_fun(update: Update, __: CallbackContext) -> None:
 def start(update: Update, __: CallbackContext) -> None:
     """Send welcome to a user along with help-message."""
     username = update.message.chat.username
-    update.message.reply_text(_("Hello, {}!".format(username)))
+    update.message.reply_text(_("Hello, {}!").format(username))
     help_fun(update, None)
 
 
@@ -104,22 +104,22 @@ class TwitchBot(Updater):
                     twitch_id, display_name = self.twitch_api.get_twitch_user_by_name(channel)
                     if twitch_id == -1:
                         update.message.reply_text(
-                            _("Channel {channel} not found.".format(channel=channel))
+                            _("Channel {channel} not found.").format(channel=channel)
                         )
                     elif twitch_id not in user_subs:
                         self.database.put_subs_for_user(update.message.chat_id, [twitch_id])
                         if len(self.database.get_channel_name(twitch_id)) == 0:
                             self.twitch_api.sub(twitch_id)
                             self.database.put_channel_name(twitch_id, display_name)
-                        update.message.reply_text(_("Successfully subscribed to {}!".format(display_name)))
+                        update.message.reply_text(_("Successfully subscribed to {}!").format(display_name))
                     else:
-                        update.message.reply_text(_("You are already subscribed to {}!".format(display_name)))
+                        update.message.reply_text(_("You are already subscribed to {}!").format(display_name))
                 except Exception as exception:
                     update.message.reply_text(
                         _(
                             "An error occurred while subscribing to {}.\n"
-                            "Reason: {}".format(channel, exception)
-                        )
+                            "Reason: {}"
+                        ).format(channel, exception)
                     )
         else:
             update.message.reply_text(
@@ -150,15 +150,15 @@ class TwitchBot(Updater):
                             self.database.delete_channel_name(twitch_id)
                             self.twitch_api.unsubscribe_event(twitch_id)
                             # self.twitch_api.unsubscribe(twitch_id)
-                        reply_func(_("Successfully unsubscribed from {}!".format(display_name)))
+                        reply_func(_("Successfully unsubscribed from {}!").format(display_name))
                     else:
-                        reply_func(_("You are not subscribed to {}!".format(channel)))
+                        reply_func(_("You are not subscribed to {}!").format(channel))
                 except Exception as exception:
                     reply_func(
                         _(
                             "An error occurred while unsubscribing from {}.\n"
-                            "Reason: {}".format(channel, exception)
-                        )
+                            "Reason: {}"
+                        ).format(channel, exception)
                     )
         else:
             if len(user_subs) > 0:
@@ -195,8 +195,8 @@ class TwitchBot(Updater):
                 update.message.reply_text(
                     _(
                         "An error occurred while unsubscribing from all events.\n"
-                        "Reason: {}".format(exception)
-                    )
+                        "Reason: {}"
+                    ).format(exception)
                 )
         else:
             update.message.reply_text(_("Command is admins-only"))
@@ -216,8 +216,8 @@ class TwitchBot(Updater):
                 update.message.reply_text(
                     _(
                         "An error occured while retrieving the complete list of events.\n"
-                        "Reason: {}".format(exception)
-                    )
+                        "Reason: {}"
+                    ).format(exception)
                 )
         else:
             update.message.reply_text(_("Command is admins-only"))
@@ -252,8 +252,8 @@ class TwitchBot(Updater):
             update.message.reply_text(
                 _(
                     "An error occured while fetching the list of subscriptions.\n"
-                    "Reason: {}".format(exception)
-                )
+                    "Reason: {}"
+                ).format(exception)
             )
 
     def channel_info(self, update: Update, __: CallbackContext) -> None:
@@ -277,12 +277,11 @@ class TwitchBot(Updater):
                         "{title}\n"
                         "\n"
                         "https://twitch.tv/{channel}\n"
-                        .format(
-                            channel=channel,
-                            game_name=data['game_name'],
-                            starting_time=starting_time,
-                            title=data['title']
-                        )
+                    ).format(
+                        channel=channel,
+                        game_name=data['game_name'],
+                        starting_time=starting_time,
+                        title=data['title']
                     )
                 )
             else:
@@ -291,13 +290,12 @@ class TwitchBot(Updater):
                         "{channel} is not online."
                         "\n"
                         "https://twitch.tv/{channel}\n"
-                        .format(channel=channel)
-                    )
+                    ).format(channel=channel)
                 )
         except Exception as exception:
             update.callback_query.edit_message_text(
                 _(
                     "An error occured while fetching channel information.\n"
-                    "Reason: {}".format(exception)
-                )
+                    "Reason: {}"
+                ).format(exception)
             )
