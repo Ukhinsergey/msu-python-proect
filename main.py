@@ -15,7 +15,7 @@ twitch_api = TwitchApi()
 bot.register_twitch_api(twitch_api)
 twitch_api.register_bot(bot)
 
-gettext.install('pytwitchbot', localedir='po')
+gettext.install('pytwitchbot', os.path.join(os.path.dirname(__file__), 'po'))
 
 
 @app.route('/')

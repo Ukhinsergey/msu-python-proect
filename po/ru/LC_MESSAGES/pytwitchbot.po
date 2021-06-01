@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-01 23:16+0300\n"
+"POT-Creation-Date: 2021-06-02 00:12+0300\n"
 "PO-Revision-Date: 2021-06-01 23:36+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -63,7 +63,7 @@ msgstr "Успешная подписка на {}!"
 msgid "You are already subscribed to {}!"
 msgstr "Вы уже подписаны на {}!"
 
-#: bot.py:121
+#: bot.py:119
 msgid ""
 "An error occurred while subscribing to {}.\n"
 "Reason: {}"
@@ -83,7 +83,7 @@ msgstr "Успешная отписка от {}!"
 msgid "You are not subscribed to {}!"
 msgstr "Вы не подписаны на {}!"
 
-#: bot.py:160
+#: bot.py:158
 msgid ""
 "An error occurred while unsubscribing from {}.\n"
 "Reason: {}"
@@ -109,7 +109,7 @@ msgstr ""
 msgid "You have unsubscribed from all events"
 msgstr "Вы отписались от всех событий"
 
-#: bot.py:198
+#: bot.py:196
 msgid ""
 "An error occurred while unsubscribing from all events.\n"
 "Reason: {}"
@@ -125,7 +125,7 @@ msgstr "Команда только для администраторов"
 msgid "No events"
 msgstr "Событий нет"
 
-#: bot.py:219
+#: bot.py:217
 msgid ""
 "An error occured while retrieving the complete list of events.\n"
 "Reason: {}"
@@ -141,7 +141,7 @@ msgstr ""
 "Список ваших подписок:\n"
 "Нажмите, чтобы узнать информацию о канале"
 
-#: bot.py:255
+#: bot.py:253
 msgid ""
 "An error occured while fetching the list of subscriptions.\n"
 "Reason: {}"
@@ -149,7 +149,7 @@ msgstr ""
 "Возникла ошибка при извлечении списка подписок.\n"
 "Причина: {}"
 
-#: bot.py:280
+#: bot.py:275
 msgid ""
 "{channel} is streaming {game_name} since {starting_time}!\n"
 "{title}\n"
@@ -161,7 +161,7 @@ msgstr ""
 "\n"
 "https://twitch.tv/{channel}\n"
 
-#: bot.py:294
+#: bot.py:289
 msgid ""
 "{channel} is not online.\n"
 "https://twitch.tv/{channel}\n"
@@ -169,10 +169,11 @@ msgstr ""
 "{channel} не онлайн.\n"
 "https://twitch.tv/{channel}\n"
 
-#: bot.py:301
+#: bot.py:297
 msgid ""
 "An error occured while fetching channel information.\n"
 "Reason: {}"
 msgstr ""
 "Возникла ошибка при извлечении информации о канале.\n"
 "Причина: {}"
+
