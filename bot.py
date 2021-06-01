@@ -2,7 +2,6 @@
 # pylint: disable=broad-except
 import logging
 import os
-from time import strftime, strptime
 import gettext
 
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
@@ -264,23 +263,15 @@ class TwitchBot(Updater):
             data = response['data']
             if len(data) > 0:
                 data = data[0]
-                starting_time = strftime(
-                    '%H:%M',
-                    strptime(
-                        data['started_at'],
-                        '%Y-%m-%dT%H:%M:%SZ'
-                    )
-                )
                 update.callback_query.edit_message_text(
                     _(
-                        "{channel} is streaming {game_name} since {starting_time}!\n"
+                        "{channel} is streaming {game_name}!\n"
                         "{title}\n"
                         "\n"
                         "https://twitch.tv/{channel}\n"
                     ).format(
                         channel=channel,
                         game_name=data['game_name'],
-                        starting_time=starting_time,
                         title=data['title']
                     )
                 )

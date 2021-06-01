@@ -49,7 +49,7 @@ def send_notification(twitch_id: int, display_name: str) -> None:
 
     message = (
         _(
-            "{display_name} is online {game_name}!\n"
+            "{display_name} is online! Streaming {game_name}!\n"
             "{title}\n"
             "\n"
             "https://twitch.tv/{display_name}\n"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-06-02 00:12+0300\n"
+"POT-Creation-Date: 2021-06-02 00:48+0300\n"
 "PO-Revision-Date: 2021-06-01 23:36+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -19,19 +19,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: main.py:45
+#: main.py:56
 msgid ""
-"{display_name} is online {game_name}!\n"
+"{display_name} is online! Streaming {game_name}!\n"
 "{title}\n"
 "\n"
 "https://twitch.tv/{display_name}\n"
 msgstr ""
-"{display_name} начал трансляцию {game_name}!\n"
+"{display_name} онлайн! Стримит {game_name}!\n"
 "{title}\n"
 "\n"
 "https://twitch.tv/{display_name}\n"
 
-#: bot.py:38
+#: bot.py:37
 msgid ""
 "/help — show available commands\n"
 "/sub [Channel1, Channel2, ...] — subscribe to channels\n"
@@ -47,23 +47,23 @@ msgstr ""
 "\n"
 "По всем вопросам писать @deanit и @seregaukhin"
 
-#: bot.py:52
+#: bot.py:51
 msgid "Hello, {}!"
 msgstr "Привет, {}!"
 
-#: bot.py:107
+#: bot.py:106
 msgid "Channel {channel} not found."
 msgstr "Канал {channel} не найден."
 
-#: bot.py:114
+#: bot.py:113
 msgid "Successfully subscribed to {}!"
 msgstr "Успешная подписка на {}!"
 
-#: bot.py:116
+#: bot.py:115
 msgid "You are already subscribed to {}!"
 msgstr "Вы уже подписаны на {}!"
 
-#: bot.py:119
+#: bot.py:118
 msgid ""
 "An error occurred while subscribing to {}.\n"
 "Reason: {}"
@@ -71,19 +71,19 @@ msgstr ""
 "Возникла ошибка при подписке на {}.\n"
 "Причина: {}"
 
-#: bot.py:126
+#: bot.py:125
 msgid "You must enter the name of the channel you want to subscribe to"
 msgstr "Вы должны ввести название канала, на который хотите подписаться"
 
-#: bot.py:153
+#: bot.py:152
 msgid "Successfully unsubscribed from {}!"
 msgstr "Успешная отписка от {}!"
 
-#: bot.py:155
+#: bot.py:154
 msgid "You are not subscribed to {}!"
 msgstr "Вы не подписаны на {}!"
 
-#: bot.py:158
+#: bot.py:157
 msgid ""
 "An error occurred while unsubscribing from {}.\n"
 "Reason: {}"
@@ -91,11 +91,11 @@ msgstr ""
 "Возникла ошибка при отписке от {}.\n"
 "Причина: {}"
 
-#: bot.py:176
+#: bot.py:175
 msgid "Select the channel you want to unsubscribe from:"
 msgstr "Выберите канал, от которого хотите отписаться:"
 
-#: bot.py:181 bot.py:244
+#: bot.py:180 bot.py:243
 msgid ""
 "You don't have any subscriptions yet!\n"
 "To subscribe, use the command\n"
@@ -105,11 +105,11 @@ msgstr ""
 "Чтобы подписаться, воспользуйтесь командой\n"
 "/sub <Название канала>"
 
-#: bot.py:193
+#: bot.py:192
 msgid "You have unsubscribed from all events"
 msgstr "Вы отписались от всех событий"
 
-#: bot.py:196
+#: bot.py:195
 msgid ""
 "An error occurred while unsubscribing from all events.\n"
 "Reason: {}"
@@ -117,15 +117,15 @@ msgstr ""
 "Возникла ошибка при отписке от всех событий.\n"
 "Причина: {}"
 
-#: bot.py:202 bot.py:223
+#: bot.py:201 bot.py:222
 msgid "Command is admins-only"
 msgstr "Команда только для администраторов"
 
-#: bot.py:210
+#: bot.py:209
 msgid "No events"
 msgstr "Событий нет"
 
-#: bot.py:217
+#: bot.py:216
 msgid ""
 "An error occured while retrieving the complete list of events.\n"
 "Reason: {}"
@@ -133,7 +133,7 @@ msgstr ""
 "Возникла ошибка при извлечении полного списка событий.\n"
 "Причина: {}"
 
-#: bot.py:239
+#: bot.py:238
 msgid ""
 "List of your subscriptions:\n"
 "Click on channel for information"
@@ -141,7 +141,7 @@ msgstr ""
 "Список ваших подписок:\n"
 "Нажмите, чтобы узнать информацию о канале"
 
-#: bot.py:253
+#: bot.py:252
 msgid ""
 "An error occured while fetching the list of subscriptions.\n"
 "Reason: {}"
@@ -149,19 +149,19 @@ msgstr ""
 "Возникла ошибка при извлечении списка подписок.\n"
 "Причина: {}"
 
-#: bot.py:275
+#: bot.py:267
 msgid ""
-"{channel} is streaming {game_name} since {starting_time}!\n"
+"{channel} is streaming {game_name}!\n"
 "{title}\n"
 "\n"
 "https://twitch.tv/{channel}\n"
 msgstr ""
-"{channel} стримит {game_name} с {starting_time}!\n"
+"{channel} стримит {game_name}!\n"
 "{title}\n"
 "\n"
 "https://twitch.tv/{channel}\n"
 
-#: bot.py:289
+#: bot.py:280
 msgid ""
 "{channel} is not online.\n"
 "https://twitch.tv/{channel}\n"
@@ -169,7 +169,7 @@ msgstr ""
 "{channel} не онлайн.\n"
 "https://twitch.tv/{channel}\n"
 
-#: bot.py:297
+#: bot.py:288
 msgid ""
 "An error occured while fetching channel information.\n"
 "Reason: {}"
