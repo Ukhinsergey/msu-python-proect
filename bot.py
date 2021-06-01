@@ -24,7 +24,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-gettext.install('pytwitchbot', localedir='/app/po')
+gettext.install('pytwitchbot', localedir='po')
 
 
 def echo(update: Update, __: CallbackContext) -> None:
