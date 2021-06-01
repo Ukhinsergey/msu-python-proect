@@ -4,6 +4,8 @@ import logging
 import os
 import gettext
 
+import requests
+
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import (
     Updater,
@@ -62,6 +64,7 @@ class TwitchBot(Updater):
         self.database = Database(echo=False)
         self.twitch_api = None  # Will be initialized by specific method
         self._add_handlers()
+        self._setup_ping()
 
         self.start_polling()
 
@@ -86,6 +89,10 @@ class TwitchBot(Updater):
         )
 
         self.dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    def _setup_ping(self) -> None:
+        url = os.environ.get('APP_URL', 'https://pytwitchbot.herokuapp.com/')
+        self.job_queue.run_repeating(lambda _: requests.get(url), 5 * 60)  # ping server every 5 minutes
 
     def register_twitch_api(self, twitch_api) -> None:
         """Register twitch api."""
