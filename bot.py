@@ -60,7 +60,7 @@ class TwitchBot(Updater):
         """Initialize bot."""
         bot_token = os.environ.get('BOT_TOKEN', None)
         super().__init__(bot_token)
-        self.database = Database()
+        self.database = Database(echo=False)
         self.twitch_api = None  # Will be initialized by specific method
         self._add_handlers()
 

@@ -2,6 +2,7 @@
 import os
 import json
 import gettext
+from signal import signal, SIGINT, SIGTERM, SIGABRT
 
 from flask import Flask, request
 
@@ -16,6 +17,16 @@ bot.register_twitch_api(twitch_api)
 twitch_api.register_bot(bot)
 
 gettext.install('pytwitchbot', os.path.join(os.path.dirname(__file__), 'po'))
+
+
+def sig_handler(signum, frame):
+    """Signal handler for manually stopping the bot."""
+    bot.stop()
+    os._exit(1)
+
+
+for signum in (SIGINT, SIGTERM, SIGABRT):
+    signal(signum, sig_handler)
 
 
 @app.route('/')
