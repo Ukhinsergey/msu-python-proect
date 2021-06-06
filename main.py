@@ -53,12 +53,12 @@ def send_notification(twitch_id: int, display_name: str) -> None:
             "{title}\n"
             "\n"
             "https://twitch.tv/{display_name}\n"
-            .format(
-                display_name=display_name,
-                game_name=data['game_name'],
-                title=data['title']
-            )
+        ).format(
+            display_name=display_name,
+            game_name=data['game_name'],
+            title=data['title']
         )
+        
     )
 
     for user_id in subscribed_users:
