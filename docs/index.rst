@@ -6,11 +6,15 @@
 Welcome to pytwitchbot's documentation!
 =======================================
 
+PyTwitchBot is a bot that notifies you about live translations on Twitch in your favourite Telegram messenger.
+
+Contents
+========
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
-
-
+   
+   usage
+   reference
 
 Indices and tables
 ==================
