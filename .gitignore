@@ -1,6 +1,7 @@
 __pycache__/
-config/
 .vscode/
 heroku/
+_build/
 *.pot
 *.mo
+*.db
