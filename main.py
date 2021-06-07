@@ -58,7 +58,6 @@ def send_notification(twitch_id: int, display_name: str) -> None:
             game_name=data['game_name'],
             title=data['title']
         )
-        
     )
 
     for user_id in subscribed_users:
