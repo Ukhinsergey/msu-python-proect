@@ -1,9 +1,14 @@
-heroku git:remote -a 'app_name'
-heroku config:set APP_URL https://'app_name'.herokuapp.com/
-heroku config:set BOT_TOKEN 'Bot token'
-heroku config:set CLIENT_ID 'twitch app id'
-heroku config:set CLIENT_SECRET 'twitch secret'
-heroku config:set MYLANG ru_RU.UTF-8
+EXPORT APP_NAME_TWITCH_BOT='name'
+EXPORT BOT_TOKEN='BOT_TOKEN'
+EXPORT CLIENT_ID='CLIENT_ID'
+EXPORT CLIENT_SECRET='CLIENT_SECRET'
+
+heroku git:remote -a $APP_NAME_TWITCH_BOT
+heroku config:set APP_URL=https://$APP_NAME_TWITCH_BOT.herokuapp.com/
+heroku config:set BOT_TOKEN=$BOT_TOKEN
+heroku config:set CLIENT_ID=$CLIENT_ID
+heroku config:set CLIENT_SECRET=$CLIENT_SECRET
+heroku config:set MYLANG=ru_RU.UTF-8
 heroku buildpacks:clear
 heroku buildpacks:set heroku/python
 heroku buildpacks:add --index 2 heroku-community/locale
